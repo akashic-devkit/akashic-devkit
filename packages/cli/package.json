@@ -1,0 +1,34 @@
+{
+  "name": "@akashic-devkit/cli",
+  "version": "0.0.1",
+  "description": "Akashic DevKit CLI",
+  "type": "module",
+  "bin": {
+    "akashic": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint .",
+    "prepublishOnly": "pnpm build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@akashic-devkit/eslint-config": "workspace:*",
+    "@akashic-devkit/typescript-config": "workspace:*",
+    "@types/node": "^22.10.2",
+    "eslint": "^9.34.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}
