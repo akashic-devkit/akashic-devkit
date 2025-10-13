@@ -1,11 +1,20 @@
-import SwitchCaseExample from "@/registry/components/SwitchCase.example";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import CodeViewer from "./CodeViewer";
 import { Card, CardContent } from "./ui/card";
+import { ReactNode } from "react";
 
 const CODE_TAB_TYPES = ["preview", "code"];
 
-export default function CodeTabs() {
+interface Props {
+  type: "Component" | "Hook";
+  name: string;
+  exampleComponent: ReactNode;
+}
+
+export default function CodeTabs({ type, name, exampleComponent }: Props) {
+  const fileExtension = type === "Component" ? ".tsx" : ".ts";
+  const fileName = name + fileExtension;
+
   return (
     <Tabs defaultValue={CODE_TAB_TYPES[0]}>
       <TabsList>
@@ -19,12 +28,10 @@ export default function CodeTabs() {
         <TabsContent key={`panel-${item}`} value={item}>
           {item === "preview" ? (
             <Card>
-              <CardContent>
-                <SwitchCaseExample />
-              </CardContent>
+              <CardContent>{exampleComponent}</CardContent>
             </Card>
           ) : (
-            <CodeViewer type="file" fileName="SwitchCase.tsx" language="typescript" />
+            <CodeViewer type="file" fileName={fileName} language="typescript" />
           )}
         </TabsContent>
       ))}

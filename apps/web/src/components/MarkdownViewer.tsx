@@ -5,12 +5,17 @@ import "highlight.js/styles/github.css";
 import { useEffect, useState } from "react";
 import { docsMap } from "@/data/docsMap";
 
-export default function MarkdownViewer() {
+interface Props {
+  name: string;
+}
+
+export default function MarkdownViewer({ name }: Props) {
   const [markdown, setMarkdown] = useState("");
 
   const loadFromFile = async () => {
     try {
-      const module = await docsMap["SwitchCase"]();
+      const key = name as keyof typeof docsMap;
+      const module = await docsMap[key]();
       setMarkdown(module.default);
     } catch {
       //   setCodeStr("");

@@ -6,6 +6,6 @@ export default [
     files: ["**/*.{ts,tsx}"],
   },
   {
-    ignores: ["dist", "**/*.gen.ts", "**/routeTree.gen.ts"],
+    ignores: ["dist", "**/*.gen.ts", "**/routeTree.gen.ts", "templates"],
   },
 ];
