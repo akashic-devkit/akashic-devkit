@@ -18,7 +18,7 @@ export const config = [
   eslintConfigPrettier,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
-  ...eslintPluginPrettierRecommended,
+  eslintPluginPrettierRecommended,
   {
     languageOptions: {
       ...pluginReact.configs.flat.recommended.languageOptions,
