@@ -2,3 +2,7 @@
 routeTree.gen.ts
 src/routeTree.gen.ts
 **/routeTree.gen.ts
+
+# 빌드 파일
+**/dist
+dist
