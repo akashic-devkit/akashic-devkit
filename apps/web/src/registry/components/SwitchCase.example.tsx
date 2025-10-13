@@ -1,6 +1,6 @@
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import SwitchCase from "./SwitchCase";
-import { Input } from "@/components/ui/input";
 
 export default function SwitchCaseExample() {
   const [value, setValue] = useState("");

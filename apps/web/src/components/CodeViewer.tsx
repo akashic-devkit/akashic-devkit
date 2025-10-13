@@ -26,12 +26,7 @@ interface CodeProps extends BaseProps {
 
 type Props = FileProps | CodeProps;
 
-export default function CodeViewer({
-  type,
-  code,
-  fileName,
-  language = "typescript",
-}: Props) {
+export default function CodeViewer({ type, code, fileName, language = "typescript" }: Props) {
   const [codeStr, setCodeStr] = useState(code ?? "");
   const [loadErr, setLoadErr] = useState<null | string>(null);
 
@@ -54,11 +49,7 @@ export default function CodeViewer({
   return (
     <Card className="p-0 relative">
       {!loadErr && (
-        <Button
-          size="icon"
-          className="absolute right-2 top-2"
-          variant="outline"
-        >
+        <Button size="icon" className="absolute right-2 top-2" variant="outline">
           <Copy />
         </Button>
       )}

@@ -11,11 +11,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Link } from "@tanstack/react-router";
 import { ChevronDown, Home } from "lucide-react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { hooksMenu } from "@/data/hooksMenu";
 import { ComponentsMenu } from "@/data/ComponentsMenu";
 

@@ -7,10 +7,7 @@ interface Props<T extends Primitive> {
   cases: Record<T, React.ReactNode> & { default: React.ReactNode };
 }
 
-export default function SwitchCase<T extends Primitive>({
-  value,
-  cases,
-}: Props<T>) {
+export default function SwitchCase<T extends Primitive>({ value, cases }: Props<T>) {
   const matchCase = value in cases ? cases[value] : cases.default;
 
   return matchCase;

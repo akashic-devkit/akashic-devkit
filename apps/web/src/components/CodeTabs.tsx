@@ -24,11 +24,7 @@ export default function CodeTabs() {
               </CardContent>
             </Card>
           ) : (
-            <CodeViewer
-              type="file"
-              fileName="SwitchCase.tsx"
-              language="typescript"
-            />
+            <CodeViewer type="file" fileName="SwitchCase.tsx" language="typescript" />
           )}
         </TabsContent>
       ))}
