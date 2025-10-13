@@ -9,8 +9,8 @@
 
   // 저장 시 ESLint + Prettier 자동 fix
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
+    "source.fixAll.eslint": "explicit"
+    // "source.organizeImports": "explicit"
   },
 
   // ESLint가 Prettier 규칙을 따르도록
