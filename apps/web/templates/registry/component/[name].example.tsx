@@ -1,3 +1,3 @@
-export default function ComponentExample() {
-  return <div>{/* fill here */}</div>;
+export default function __EXAMPLE__() {
+  return <div>__EXAMPLE__</div>;
 }

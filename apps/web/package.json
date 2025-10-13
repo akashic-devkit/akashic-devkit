@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "create:component": "bash ./scripts/add_component.sh"
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.1.12",
