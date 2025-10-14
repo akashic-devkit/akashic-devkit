@@ -13,7 +13,7 @@ import { Link } from "@tanstack/react-router";
 import { ChevronDown, Home } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { hooksMenu } from "@/data/hooksMenu";
-import { componentsMenu } from "@/data/componentsMenu";
+import { componentsMenu } from "@/data/ComponentsMenu";
 
 // Menu items.
 const items = [
