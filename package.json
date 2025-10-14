@@ -1,6 +1,12 @@
 {
   "name": "akashic-devkit",
   "private": true,
+  "lint-staged": {
+    "**/*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "type": "module",
   "scripts": {
     "build:all": "turbo run build",
     "dev:all": "turbo run dev",
@@ -10,9 +16,14 @@
     "build:web": "turbo run build --filter=web",
     "dev:cli": "turbo run dev --filter=@akashic-devkit/cli",
     "build:cli": "turbo run build --filter=@akashic-devkit/cli",
-    "cli": "node packages/cli/dist/index.js"
+    "cli": "node packages/cli/dist/index.js",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.4",
     "prettier": "^3.6.2",
     "turbo": "^2.5.6",
     "typescript": "5.9.2"
