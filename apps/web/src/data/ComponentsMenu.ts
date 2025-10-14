@@ -2,6 +2,6 @@
 export const ComponentsMenu = [
   {
     title: "SwitchCase",
-    url: "/switchCase",
+    url: "/component/SwitchCase",
   },
 ];

@@ -1,9 +1,9 @@
 import CodeTabs from "@/components/CodeTabs";
 import MarkdownViewer from "@/components/MarkdownViewer";
+import SwitchCaseExample from "@/registry/components/SwitchCase/SwitchCase.example";
 import { createFileRoute } from "@tanstack/react-router";
-import SwitchCaseExample from "@/registry/components/SwitchCase.example";
 
-export const Route = createFileRoute("/switchCase")({
+export const Route = createFileRoute("/component/SwitchCase")({
   component: RouteComponent,
 });
 

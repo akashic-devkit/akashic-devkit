@@ -9,55 +9,58 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SwitchCaseRouteImport } from './routes/switchCase'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ComponentIndexRouteImport } from './routes/component/index'
+import { Route as ComponentSwitchCaseRouteImport } from './routes/component/SwitchCase'
 
-const SwitchCaseRoute = SwitchCaseRouteImport.update({
-  id: '/switchCase',
-  path: '/switchCase',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComponentIndexRoute = ComponentIndexRouteImport.update({
+  id: '/component/',
+  path: '/component/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentSwitchCaseRoute = ComponentSwitchCaseRouteImport.update({
+  id: '/component/SwitchCase',
+  path: '/component/SwitchCase',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/switchCase': typeof SwitchCaseRoute
+  '/component/SwitchCase': typeof ComponentSwitchCaseRoute
+  '/component': typeof ComponentIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/switchCase': typeof SwitchCaseRoute
+  '/component/SwitchCase': typeof ComponentSwitchCaseRoute
+  '/component': typeof ComponentIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/switchCase': typeof SwitchCaseRoute
+  '/component/SwitchCase': typeof ComponentSwitchCaseRoute
+  '/component/': typeof ComponentIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/switchCase'
+  fullPaths: '/' | '/component/SwitchCase' | '/component'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/switchCase'
-  id: '__root__' | '/' | '/switchCase'
+  to: '/' | '/component/SwitchCase' | '/component'
+  id: '__root__' | '/' | '/component/SwitchCase' | '/component/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  SwitchCaseRoute: typeof SwitchCaseRoute
+  ComponentSwitchCaseRoute: typeof ComponentSwitchCaseRoute
+  ComponentIndexRoute: typeof ComponentIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/switchCase': {
-      id: '/switchCase'
-      path: '/switchCase'
-      fullPath: '/switchCase'
-      preLoaderRoute: typeof SwitchCaseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -65,12 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/component/': {
+      id: '/component/'
+      path: '/component'
+      fullPath: '/component'
+      preLoaderRoute: typeof ComponentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/component/SwitchCase': {
+      id: '/component/SwitchCase'
+      path: '/component/SwitchCase'
+      fullPath: '/component/SwitchCase'
+      preLoaderRoute: typeof ComponentSwitchCaseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SwitchCaseRoute: SwitchCaseRoute,
+  ComponentSwitchCaseRoute: ComponentSwitchCaseRoute,
+  ComponentIndexRoute: ComponentIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
