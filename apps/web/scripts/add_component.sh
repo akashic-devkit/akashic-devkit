@@ -21,7 +21,7 @@ component_template_file="${PROJECT_ROOT}/templates/registry/component/[name].tsx
 example_template_file="${PROJECT_ROOT}/templates/registry/component/[name].example.tsx"
 guide_template_file="${PROJECT_ROOT}/templates/registry/component/[name].guide.md"
 
-route_output_file="${PROJECT_ROOT}/src/routes/${name}.tsx"
+route_output_file="${PROJECT_ROOT}/src/routes/component/${name}.tsx"
 component_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.tsx"
 example_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.example.tsx"
 guide_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.guide.md"
@@ -72,7 +72,7 @@ awk -v name="$name" '
 /^];/ {
     print "  {"
     print "    title: \"" name "\","
-    print "    url: \"/" name "\","
+    print "    url: \"/component/" name "\","
     print "  },"
 }
 { print }

@@ -4,7 +4,7 @@ import MarkdownViewer from "@/components/MarkdownViewer";
 import { createFileRoute } from "@tanstack/react-router";
 import __EXAMPLE__ from "@/registry/components/__NAME__/__NAME__.example";
 
-export const Route = createFileRoute("/__NAME__")({
+export const Route = createFileRoute("/component/__NAME__")({
   component: RouteComponent,
 });
 
