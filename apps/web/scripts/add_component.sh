@@ -56,7 +56,8 @@ fi
 mkdir -p "${PROJECT_ROOT}/src/registry/components/${name}"
 
 # 템플릿의 변수값을 치환하여 파일 생성
-sed -e "s/__NAME__/${name}/g" \
+sed -e "1d" \
+    -e "s/__NAME__/${name}/g" \
     -e "s/__EXAMPLE__/${example}/g" \
     "$route_template_file" > "$route_output_file"
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import CodeTabs from "@/components/CodeTabs";
 import MarkdownViewer from "@/components/MarkdownViewer";
 import { createFileRoute } from "@tanstack/react-router";
