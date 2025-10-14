@@ -1,6 +1,6 @@
 ## 개요
 
-fill here
+`__NAME__`
 
 ## Props
 
