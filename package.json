@@ -17,7 +17,9 @@
     "dev:cli": "turbo run dev --filter=@akashic-devkit/cli",
     "build:cli": "turbo run build --filter=@akashic-devkit/cli",
     "cli": "node packages/cli/dist/index.js",
-    "prepare": "husky"
+    "prepare": "husky",
+    "create:component": "cd apps/web && pnpm create:component",
+    "create:hook": "cd apps/web && pnpm create:hook"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
