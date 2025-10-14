@@ -1,5 +1,5 @@
 // Menu items.
-export const ComponentsMenu = [
+export const componentsMenu = [
   {
     title: "SwitchCase",
     url: "/component/SwitchCase",

@@ -26,7 +26,7 @@ component_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.t
 example_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.example.tsx"
 guide_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.guide.md"
 
-menu_file="${PROJECT_ROOT}/src/data/ComponentsMenu.ts"  
+menu_file="${PROJECT_ROOT}/src/data/componentsMenu.ts"  
 docs_map_file="${PROJECT_ROOT}/src/data/docsMap.ts" 
 codes_map_file="${PROJECT_ROOT}/src/data/rawCodesMap.ts" 
 

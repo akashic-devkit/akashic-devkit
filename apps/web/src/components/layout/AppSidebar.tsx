@@ -13,7 +13,7 @@ import { Link } from "@tanstack/react-router";
 import { ChevronDown, Home } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { hooksMenu } from "@/data/hooksMenu";
-import { ComponentsMenu } from "@/data/ComponentsMenu";
+import { componentsMenu } from "@/data/ComponentsMenu";
 
 // Menu items.
 const items = [
@@ -59,7 +59,7 @@ export default function AppSidebar() {
             <CollapsibleContent className="animate-collapsible-down data-[state=closed]:animate-collapsible-up">
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {ComponentsMenu.map((item) => (
+                  {componentsMenu.map((item) => (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
                         <Link to={item.url}>
