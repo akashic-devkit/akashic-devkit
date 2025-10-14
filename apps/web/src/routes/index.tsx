@@ -1,3 +1,4 @@
+import ListOverview from "@/components/ListOverview";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
@@ -6,8 +7,10 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="p-2">
-      <h3>Welcome Home!</h3>
+    <div>
+      <h1 className="text-2xl font-bold mb-8">Components & Hooks</h1>
+      <ListOverview type="Component" collapsible className="mb-4" />
+      <ListOverview type="Hook" collapsible />
     </div>
   );
 }

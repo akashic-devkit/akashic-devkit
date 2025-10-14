@@ -1,3 +1,4 @@
+import ListOverview from "@/components/ListOverview";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/hook/")({
@@ -5,5 +6,10 @@ export const Route = createFileRoute("/hook/")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/hook/"!</div>;
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-8">Hooks</h1>
+      <ListOverview type="Hook" />
+    </div>
+  );
 }

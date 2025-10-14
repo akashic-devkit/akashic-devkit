@@ -27,7 +27,11 @@ const items = [
 export default function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader>Common Management System</SidebarHeader>
+      <SidebarHeader>
+        <Link to="/" className="font-semibold">
+          Akashic Devkit Template
+        </Link>
+      </SidebarHeader>
       <SidebarContent>
         {/* Application */}
         <SidebarGroup>
