@@ -1,8 +1,8 @@
 // @ts-nocheck
 import CodeTabs from "@/components/CodeTabs";
 import MarkdownViewer from "@/components/MarkdownViewer";
+import __EXAMPLE__ from "@/registry/hooks/__NAME__/__NAME__.example";
 import { createFileRoute } from "@tanstack/react-router";
-import __EXAMPLE__ from "@/registry/hook/__NAME__/__NAME__.example";
 
 export const Route = createFileRoute("/hook/__NAME__")({
   component: RouteComponent,

@@ -14,16 +14,18 @@ fi
 
 # 변수 설정
 name=$1
-Name=${name^[a-z]}
+first=$(echo "${name:0:1}" | tr '[:lower:]' '[:upper:]')
+rest="${name:1}"
+Name="${first}${rest}"
 example="${Name}Example"
 
-route_template_file="${PROJECT_ROOT}/templates/route/component/[name].tsx"
-component_template_file="${PROJECT_ROOT}/templates/registry/component/[name].tsx"
-example_template_file="${PROJECT_ROOT}/templates/registry/component/[name].example.tsx"
-guide_template_file="${PROJECT_ROOT}/templates/registry/component/[name].guide.md"
+route_template_file="${PROJECT_ROOT}/templates/route/hook/[name].tsx"
+hook_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].ts"
+example_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].example.tsx"
+guide_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].guide.md"
 
 route_output_file="${PROJECT_ROOT}/src/routes/hook/${name}.tsx"
-component_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.tsx"
+hook_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.ts"
 example_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.example.tsx"
 guide_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.guide.md"
 
@@ -38,8 +40,8 @@ if [ ! -f "$route_template_file" ]; then
     exit 1
 fi
 
-if [ ! -f "$component_template_file" ]; then
-    echo "❌ 템플릿 파일을 찾을 수 없습니다: $component_template_file"
+if [ ! -f "$hook_template_file" ]; then
+    echo "❌ 템플릿 파일을 찾을 수 없습니다: $hook_template_file"
     exit 1
 fi
 
@@ -62,7 +64,7 @@ sed -e "1d" \
     -e "s/__EXAMPLE__/${example}/g" \
     "$route_template_file" > "$route_output_file"
 
-sed "s/__NAME__/${name}/g" "$component_template_file" > "$component_output_file"
+sed "s/__NAME__/${name}/g" "$hook_template_file" > "$hook_output_file"
 
 sed "s/__EXAMPLE__/${example}/g" "$example_template_file" > "$example_output_file"
 
@@ -88,7 +90,7 @@ awk -v name="$name" '
 
 awk -v name="$name" '
 /^} as const;/ {
-    print "  \"" name ".tsx\": () => import(\"@/registry/hooks/" name "/" name ".example.tsx?raw\"),"
+    print "  \"" name ".ts\": () => import(\"@/registry/hooks/" name "/" name ".example.tsx?raw\"),"
 }
 { print }
 ' "$codes_map_file" > "${codes_map_file}.tmp" && mv "${codes_map_file}.tmp" "$codes_map_file"
@@ -96,6 +98,6 @@ awk -v name="$name" '
 
 echo "✅ 컴포넌트 파일들이 생성되었습니다!"
 echo "  📄 ${route_output_file}"
-echo "  📄 ${component_output_file}"
+echo "  📄 ${hook_template_file}"
 echo "  📄 ${example_output_file}"
 echo "  📄 ${guide_output_file}"

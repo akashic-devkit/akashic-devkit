@@ -15,7 +15,7 @@ function RouteComponent() {
       {/* demo */}
       <div>
         <h2 className="text-lg font-bold mb-2">Demo</h2>
-        <CodeTabs type="Component" name="useMobile" exampleComponent={<UseMobileExample />} />
+        <CodeTabs type="Hook" name="useMobile" exampleComponent={<UseMobileExample />} />
       </div>
       {/* docs */}
       <div>
