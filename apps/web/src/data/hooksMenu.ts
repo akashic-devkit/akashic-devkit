@@ -1,7 +1,7 @@
 // Menu items.
 export const hooksMenu = [
   {
-    title: "use",
-    url: "/",
+    title: "useMobile",
+    url: "/hook/useMobile",
   },
 ];

@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HookIndexRouteImport } from './routes/hook/index'
 import { Route as ComponentIndexRouteImport } from './routes/component/index'
+import { Route as HookUseMobileRouteImport } from './routes/hook/useMobile'
 import { Route as ComponentSwitchCaseRouteImport } from './routes/component/SwitchCase'
 
 const IndexRoute = IndexRouteImport.update({
@@ -18,9 +20,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HookIndexRoute = HookIndexRouteImport.update({
+  id: '/hook/',
+  path: '/hook/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComponentIndexRoute = ComponentIndexRouteImport.update({
   id: '/component/',
   path: '/component/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HookUseMobileRoute = HookUseMobileRouteImport.update({
+  id: '/hook/useMobile',
+  path: '/hook/useMobile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentSwitchCaseRoute = ComponentSwitchCaseRouteImport.update({
@@ -32,31 +44,50 @@ const ComponentSwitchCaseRoute = ComponentSwitchCaseRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/component/SwitchCase': typeof ComponentSwitchCaseRoute
+  '/hook/useMobile': typeof HookUseMobileRoute
   '/component': typeof ComponentIndexRoute
+  '/hook': typeof HookIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/component/SwitchCase': typeof ComponentSwitchCaseRoute
+  '/hook/useMobile': typeof HookUseMobileRoute
   '/component': typeof ComponentIndexRoute
+  '/hook': typeof HookIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/component/SwitchCase': typeof ComponentSwitchCaseRoute
+  '/hook/useMobile': typeof HookUseMobileRoute
   '/component/': typeof ComponentIndexRoute
+  '/hook/': typeof HookIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/component/SwitchCase' | '/component'
+  fullPaths:
+    | '/'
+    | '/component/SwitchCase'
+    | '/hook/useMobile'
+    | '/component'
+    | '/hook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/component/SwitchCase' | '/component'
-  id: '__root__' | '/' | '/component/SwitchCase' | '/component/'
+  to: '/' | '/component/SwitchCase' | '/hook/useMobile' | '/component' | '/hook'
+  id:
+    | '__root__'
+    | '/'
+    | '/component/SwitchCase'
+    | '/hook/useMobile'
+    | '/component/'
+    | '/hook/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ComponentSwitchCaseRoute: typeof ComponentSwitchCaseRoute
+  HookUseMobileRoute: typeof HookUseMobileRoute
   ComponentIndexRoute: typeof ComponentIndexRoute
+  HookIndexRoute: typeof HookIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -68,11 +99,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hook/': {
+      id: '/hook/'
+      path: '/hook'
+      fullPath: '/hook'
+      preLoaderRoute: typeof HookIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/component/': {
       id: '/component/'
       path: '/component'
       fullPath: '/component'
       preLoaderRoute: typeof ComponentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hook/useMobile': {
+      id: '/hook/useMobile'
+      path: '/hook/useMobile'
+      fullPath: '/hook/useMobile'
+      preLoaderRoute: typeof HookUseMobileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/component/SwitchCase': {
@@ -88,7 +133,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ComponentSwitchCaseRoute: ComponentSwitchCaseRoute,
+  HookUseMobileRoute: HookUseMobileRoute,
   ComponentIndexRoute: ComponentIndexRoute,
+  HookIndexRoute: HookIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
