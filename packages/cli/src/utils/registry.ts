@@ -1,40 +1,68 @@
-import degit from "degit";
 import { existsSync } from "fs";
-import { mkdir } from "fs/promises";
+import { mkdir, writeFile } from "fs/promises";
 import { dirname, resolve } from "path";
 
+const GITHUB_REPO = "akashic-devkit/akashic-devkit";
+const GITHUB_BRANCH = "main";
+const REGISTRY_PATH = "apps/web/src/registry";
+
+type ItemType = "components" | "hooks";
+
 /**
- * Fetch component or hook from registry
+ * Check if item exists in registry using GitHub API
  */
-export async function fetchFromRegistry(
-  registry: string,
-  itemName: string,
-  targetPath: string
-): Promise<void> {
-  if (!registry) {
-    throw new Error("Registry URL is not configured in akashic.json");
+export async function checkItemExists(
+  name: string,
+  type: ItemType
+): Promise<boolean> {
+  const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${REGISTRY_PATH}/${type}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      return false;
+    }
+
+    const items = (await response.json()) as Array<{ name: string; type: string }>;
+    return items.some((item) => item.type === "dir" && item.name === name);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Fetch file content from GitHub raw URL
+ */
+export async function fetchFileFromRegistry(
+  name: string,
+  type: ItemType,
+  extension: string
+): Promise<string> {
+  const rawUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${REGISTRY_PATH}/${type}/${name}/${name}.${extension}`;
+
+  const response = await fetch(rawUrl);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch "${name}": ${response.statusText}`);
   }
 
-  // degit을 사용하여 파일 가져오기
-  const emitter = degit(`${registry}/${itemName}`, {
-    cache: false,
-    force: true,
-  });
+  return await response.text();
+}
 
-  // 대상 디렉토리가 없으면 생성
+/**
+ * Save file to target path
+ */
+export async function saveFile(
+  content: string,
+  targetPath: string
+): Promise<void> {
   const targetDir = dirname(targetPath);
+
+  // Create directory if it doesn't exist
   if (!existsSync(targetDir)) {
     await mkdir(targetDir, { recursive: true });
   }
 
-  try {
-    await emitter.clone(targetPath);
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Failed to fetch "${itemName}": ${error.message}`);
-    }
-    throw error;
-  }
+  await writeFile(targetPath, content, "utf-8");
 }
 
 /**

@@ -7,10 +7,11 @@ export interface AkashicConfig {
     components: string;
     hooks: string;
   };
-  registry: string;
 }
 
 const CONFIG_FILE = "akashic.json";
+const REGISTRY_BASE =
+  "https://github.com/akashic-devkit/akashic-devkit/tree/main/apps/web/src/registry";
 
 /**
  * Get default config
@@ -21,8 +22,14 @@ export function getDefaultConfig(): AkashicConfig {
       components: "@/components",
       hooks: "@/hooks",
     },
-    registry: "", // 비워두기
   };
+}
+
+/**
+ * Get registry URL
+ */
+export function getRegistryUrl(): string {
+  return REGISTRY_BASE;
 }
 
 /**

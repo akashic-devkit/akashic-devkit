@@ -2,7 +2,12 @@ import { Command } from "commander";
 import { resolve } from "path";
 import { readConfig } from "../utils/config.js";
 import { confirm } from "../utils/prompts.js";
-import { fetchFromRegistry, fileExists } from "../utils/registry.js";
+import {
+  checkItemExists,
+  fetchFileFromRegistry,
+  fileExists,
+  saveFile,
+} from "../utils/registry.js";
 
 /**
  * Add command - Add a component or hook
@@ -26,15 +31,25 @@ export function addCommand(program: Command) {
         // Read config
         const config = await readConfig(cwd);
 
-        // Determine if it's a component or hook based on name
-        // This is a simple heuristic - you can make it more sophisticated
+        // Determine if it's a component or hook
         const isHook = name.startsWith("use");
-        const aliasKey = isHook ? "hooks" : "components";
-        const targetAlias = config.aliases[aliasKey];
+        const itemType = isHook ? "hooks" : "components";
+        const extension = isHook ? "ts" : "tsx";
+        const targetAlias = config.aliases[itemType];
+
+        // Check if item exists in registry
+        console.log(`Checking if "${name}" exists...`);
+        const exists = await checkItemExists(name, itemType);
+        if (!exists) {
+          console.error(`Error: "${name}" does not exist in the registry`);
+          process.exit(1);
+        }
 
         // Resolve target path
-        // Note: This is simplified. You may need to handle path alias resolution
-        const targetPath = resolve(cwd, targetAlias.replace("@/", "src/"), name);
+        // Convert @/components or @/hooks to src/components or src/hooks
+        const relativePath = targetAlias.replace("@/", "src/");
+        const fileName = `${name}.${extension}`;
+        const targetPath = resolve(cwd, relativePath, fileName);
 
         // Check if file already exists
         if (fileExists(targetPath)) {
@@ -48,11 +63,14 @@ export function addCommand(program: Command) {
           }
         }
 
-        // Fetch from registry
-        console.log(`Adding ${name}...`);
-        await fetchFromRegistry(config.registry, name, targetPath);
+        // Fetch file content from registry
+        console.log(`Fetching ${name}...`);
+        const content = await fetchFileFromRegistry(name, itemType, extension);
 
-        console.log(`✓ Added ${name}`);
+        // Save file
+        await saveFile(content, targetPath);
+
+        console.log(`✓ Added ${name} to ${relativePath}/${fileName}`);
       } catch (error) {
         if (error instanceof Error) {
           console.error("Error:", error.message);
