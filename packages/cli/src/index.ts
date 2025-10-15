@@ -1,26 +1,11 @@
 import { Command } from "commander";
-import { readFile } from "fs/promises";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-async function getVersion() {
-  try {
-    const packageJsonPath = join(__dirname, "../package.json");
-    const packageJson = await readFile(packageJsonPath, "utf-8");
-    return JSON.parse(packageJson).version;
-  } catch {
-    return "0.0.1";
-  }
-}
+import { getVersion } from "./util/index.js";
 
 const program = new Command();
 
 program
   .name("akashic")
   .description("Akashic DevKit CLI - Your personal component registry")
-  .version(await getVersion(), "-v, --version", "Display version number");
+  .version(await getVersion(), "-v, --Version", "Display version number");
 
 program.parse();

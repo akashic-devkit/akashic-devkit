@@ -12,10 +12,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "clean": "rm -rf dist",
     "type-check": "tsc --noEmit",
-    "lint": "eslint .",
-    "prepublishOnly": "pnpm build"
+    "lint": "eslint ."
   },
   "publishConfig": {
     "access": "public"
