@@ -19,7 +19,9 @@
     "access": "public"
   },
   "dependencies": {
-    "commander": "^12.1.0"
+    "commander": "^12.1.0",
+    "degit": "^2.8.4",
+    "inquirer": "^12.10.0"
   },
   "devDependencies": {
     "@akashic-devkit/eslint-config": "workspace:*",

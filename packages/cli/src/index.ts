@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { getVersion } from "./util/index.js";
+import { getVersion } from "./utils/version.js";
 
 const program = new Command();
 
