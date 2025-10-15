@@ -8,13 +8,41 @@ const REGISTRY_PATH = "apps/web/src/registry";
 
 type ItemType = "components" | "hooks";
 
+interface RegistryItem {
+  name: string;
+  type: string;
+}
+
+/**
+ * Get all items from registry by type
+ */
+export async function getRegistryItems(type: ItemType): Promise<string[]> {
+  const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${REGISTRY_PATH}/${type}`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      headers: {
+        "User-Agent": "akashic-devkit-cli",
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${type}: ${response.statusText}`);
+    }
+
+    const items = (await response.json()) as RegistryItem[];
+    return items.filter((item) => item.type === "dir").map((item) => item.name);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to fetch ${type} list: ${error.message}`);
+    }
+    throw error;
+  }
+}
+
 /**
  * Check if item exists in registry using GitHub API
  */
-export async function checkItemExists(
-  name: string,
-  type: ItemType
-): Promise<boolean> {
+export async function checkItemExists(name: string, type: ItemType): Promise<boolean> {
   const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${REGISTRY_PATH}/${type}`;
 
   try {
@@ -23,7 +51,7 @@ export async function checkItemExists(
       return false;
     }
 
-    const items = (await response.json()) as Array<{ name: string; type: string }>;
+    const items = (await response.json()) as RegistryItem[];
     return items.some((item) => item.type === "dir" && item.name === name);
   } catch {
     return false;
@@ -51,10 +79,7 @@ export async function fetchFileFromRegistry(
 /**
  * Save file to target path
  */
-export async function saveFile(
-  content: string,
-  targetPath: string
-): Promise<void> {
+export async function saveFile(content: string, targetPath: string): Promise<void> {
   const targetDir = dirname(targetPath);
 
   // Create directory if it doesn't exist
