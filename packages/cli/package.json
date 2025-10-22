@@ -21,7 +21,8 @@
   "dependencies": {
     "commander": "^12.1.0",
     "inquirer": "^12.10.0",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "ora": "^9.0.0"
   },
   "devDependencies": {
     "@akashic-devkit/eslint-config": "workspace:*",

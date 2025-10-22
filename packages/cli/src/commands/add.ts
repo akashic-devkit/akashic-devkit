@@ -2,6 +2,7 @@ import { Command } from "commander";
 import { resolve } from "path";
 import { readConfig } from "../utils/config.js";
 import { confirm } from "../utils/prompts.js";
+import { logger } from "../utils/logger.js";
 import {
   checkItemExists,
   fetchFileFromRegistry,
@@ -14,15 +15,15 @@ import {
  */
 export function addCommand(program: Command) {
   program
-    .command("add <name>")
+    .command("add <n>")
     .description("Add a component or hook")
     .action(async (name: string, options, command) => {
       try {
         // Validate arguments count
         const args = command.args;
         if (args.length !== 1) {
-          console.error("Error: Expected exactly 1 argument");
-          console.log("Usage: akashic add <component-or-hook-name>");
+          logger.error("Expected exactly 1 argument");
+          logger.info("Usage: akashic add <component-or-hook-name>");
           process.exit(1);
         }
 
@@ -38,10 +39,13 @@ export function addCommand(program: Command) {
         const targetAlias = config.aliases[itemType];
 
         // Check if item exists in registry
-        console.log(`Checking if "${name}" exists...`);
+        const checkSpinner = logger.spinner(`Checking if "${name}" exists...`);
+        checkSpinner.start();
         const exists = await checkItemExists(name, itemType);
+        checkSpinner.stop();
+
         if (!exists) {
-          console.error(`Error: "${name}" does not exist in the registry`);
+          logger.error(`"${name}" does not exist in the registry`);
           process.exit(1);
         }
 
@@ -58,22 +62,31 @@ export function addCommand(program: Command) {
           );
 
           if (!shouldOverwrite) {
-            console.log("Cancelled.");
+            logger.warn("Cancelled");
             return;
           }
         }
 
         // Fetch file content from registry
-        console.log(`Fetching ${name}...`);
-        const content = await fetchFileFromRegistry(name, itemType, extension);
+        const fetchSpinner = logger.spinner(`Fetching ${name}...`);
+        fetchSpinner.start();
+        const content = await fetchFileFromRegistry(
+          name,
+          itemType,
+          extension
+        );
+        fetchSpinner.stop();
 
         // Save file
         await saveFile(content, targetPath);
 
-        console.log(`✓ Added ${name} to ${relativePath}/${fileName}`);
+        logger.success(`Added ${name}`, {
+          path: `${relativePath}/${fileName}`,
+          type: isHook ? "hook" : "component",
+        });
       } catch (error) {
         if (error instanceof Error) {
-          console.error("Error:", error.message);
+          logger.error(error.message);
         }
         process.exit(1);
       }

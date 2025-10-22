@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import { configExists, getDefaultConfig, writeConfig } from "../utils/config.js";
 import { confirm } from "../utils/prompts.js";
+import { logger } from "../utils/logger.js";
 
 /**
  * Init command - Initialize akashic.json config file
@@ -20,7 +21,7 @@ export function initCommand(program: Command) {
           );
 
           if (!shouldOverwrite) {
-            console.log("Initialization cancelled.");
+            logger.warn("Initialization cancelled");
             return;
           }
         }
@@ -29,10 +30,10 @@ export function initCommand(program: Command) {
         const config = getDefaultConfig();
         await writeConfig(config, cwd);
 
-        console.log("✓ Created akashic.json");
+        logger.success("Created akashic.json");
       } catch (error) {
         if (error instanceof Error) {
-          console.error("Error:", error.message);
+          logger.error(error.message);
         }
         process.exit(1);
       }

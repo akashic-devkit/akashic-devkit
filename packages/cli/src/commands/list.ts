@@ -1,4 +1,5 @@
 import { Command } from "commander";
+import { logger } from "../utils/logger.js";
 import { getRegistryItems } from "../utils/registry.js";
 
 /**
@@ -11,7 +12,8 @@ export function listCommand(program: Command) {
     .description("List all available components and hooks")
     .action(async () => {
       try {
-        console.log("Fetching available items from registry...\n");
+        const spinner = logger.spinner("Fetching available items from registry...");
+        spinner.start();
 
         // Fetch components and hooks in parallel
         const [components, hooks] = await Promise.all([
@@ -19,34 +21,31 @@ export function listCommand(program: Command) {
           getRegistryItems("hooks"),
         ]);
 
+        spinner.succeed("Registry items fetched");
+        logger.break();
+
         // Display components
         if (components.length > 0) {
-          console.log("📦 Components:");
-          components.forEach((component) => {
-            console.log(`  - ${component}`);
-          });
-          console.log();
+          logger.list(components, "📦 Components");
         } else {
-          console.log("📦 Components: (none)\n");
+          logger.info("📦 Components: (none)");
         }
+
+        logger.break();
 
         // Display hooks
         if (hooks.length > 0) {
-          console.log("🪝 Hooks:");
-          hooks.forEach((hook) => {
-            console.log(`  - ${hook}`);
-          });
-          console.log();
+          logger.list(hooks, "🪝 Hooks");
         } else {
-          console.log("🪝 Hooks: (none)\n");
+          logger.info("🪝 Hooks: (none)");
         }
 
-        console.log(
+        logger.info(
           `Total: ${components.length} component(s), ${hooks.length} hook(s)`
         );
       } catch (error) {
         if (error instanceof Error) {
-          console.error("Error:", error.message);
+          logger.error(error.message);
         }
         process.exit(1);
       }
