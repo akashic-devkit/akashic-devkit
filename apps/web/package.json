@@ -12,7 +12,9 @@
     "format": "prettier --write .",
     "preview": "vite preview",
     "create:component": "bash ./scripts/add_component.sh",
-    "create:hook": "bash ./scripts/add_hook.sh"
+    "create:hook": "bash ./scripts/add_hook.sh",
+    "clean:component": "bash ./scripts/clean_component.sh",
+    "clean:hook": "bash ./scripts/clean_hook.sh"
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.1.12",
