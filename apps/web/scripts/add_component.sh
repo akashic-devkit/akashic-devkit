@@ -68,29 +68,47 @@ sed "s/__EXAMPLE__/${example}/g" "$example_template_file" > "$example_output_fil
 sed "s/__NAME__/${name}/g" "$guide_template_file" > "$guide_output_file"
 
 # 데이터 추가
-awk -v name="$name" '
-/^];/ {
-    print "  {"
-    print "    title: \"" name "\","
-    print "    url: \"/component/" name "\","
-    print "  },"
-}
-{ print }
-' "$menu_file" > "${menu_file}.tmp" && mv "${menu_file}.tmp" "$menu_file"
-    
-awk -v name="$name" '
-/^} as const;/ {
-    print "  " name ": () => import(\"../registry/components/" name "/" name ".guide.md?raw\"),"
-}
-{ print }
-' "$docs_map_file" > "${docs_map_file}.tmp" && mv "${docs_map_file}.tmp" "$docs_map_file"
+# menu.ts 데이터 추가
+if ! grep -q "\"$name\"" "$menu_file"; then
+    awk -v name="$name" '
+    /^];/ {
+        print "  {"
+        print "    title: \"" name "\","
+        print "    url: \"/component/" name "\","
+        print "  },"
+    }
+    { print }
+    ' "$menu_file" > "${menu_file}.tmp" && mv "${menu_file}.tmp" "$menu_file"
+    echo "✅ menu.ts에 $name 추가"
+else
+    echo "⏭️  menu.ts에 $name 이미 존재"
+fi
 
-awk -v name="$name" '
-/^} as const;/ {
-    print "  \"" name ".tsx\": () => import(\"@/registry/components/" name "/" name ".example.tsx?raw\"),"
-}
-{ print }
-' "$codes_map_file" > "${codes_map_file}.tmp" && mv "${codes_map_file}.tmp" "$codes_map_file"
+# docsMap.ts 데이터 추가
+if ! grep -q "$name:" "$docs_map_file" || ! grep -q "components/$name/$name.guide.md" "$docs_map_file"; then
+    awk -v name="$name" '
+    /^} as const;/ {
+        print "  " name ": () => import(\"../registry/components/" name "/" name ".guide.md?raw\"),"
+    }
+    { print }
+    ' "$docs_map_file" > "${docs_map_file}.tmp" && mv "${docs_map_file}.tmp" "$docs_map_file"
+    echo "✅ docsMap.ts에 $name 추가"
+else
+    echo "⏭️  docsMap.ts에 $name 이미 존재"
+fi
+
+# codesMap.ts 데이터 추가
+if ! grep -q "\"$name.tsx\"" "$codes_map_file"; then
+    awk -v name="$name" '
+    /^} as const;/ {
+        print "  \"" name ".tsx\": () => import(\"@/registry/components/" name "/" name ".example.tsx?raw\"),"
+    }
+    { print }
+    ' "$codes_map_file" > "${codes_map_file}.tmp" && mv "${codes_map_file}.tmp" "$codes_map_file"
+    echo "✅ codesMap.ts에 $name 추가"
+else
+    echo "⏭️  codesMap.ts에 $name 이미 존재"
+fi
     
 
 echo "✅ 컴포넌트 파일들이 생성되었습니다!"
