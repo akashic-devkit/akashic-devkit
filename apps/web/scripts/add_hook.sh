@@ -23,11 +23,13 @@ route_template_file="${PROJECT_ROOT}/templates/route/hook/[name].tsx"
 hook_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].ts"
 example_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].example.tsx"
 guide_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].guide.md"
+dependencies_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].json"
 
 route_output_file="${PROJECT_ROOT}/src/routes/hook/${name}.tsx"
 hook_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.ts"
 example_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.example.tsx"
 guide_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.guide.md"
+dependencies_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.json"
 
 menu_file="${PROJECT_ROOT}/src/data/hooksMenu.ts"  
 docs_map_file="${PROJECT_ROOT}/src/data/docsMap.ts" 
@@ -55,6 +57,11 @@ if [ ! -f "$guide_template_file" ]; then
     exit 1
 fi
 
+if [ ! -f "$dependencies_template_file" ]; then
+    echo "❌ 템플릿 파일을 찾을 수 없습니다: $dependencies_template_file"
+    exit 1
+fi
+
 # 출력 디렉토리 생성
 mkdir -p "${PROJECT_ROOT}/src/registry/hooks/${name}"
 
@@ -69,6 +76,8 @@ sed "s/__NAME__/${name}/g" "$hook_template_file" > "$hook_output_file"
 sed "s/__EXAMPLE__/${example}/g" "$example_template_file" > "$example_output_file"
 
 sed "s/__NAME__/${name}/g" "$guide_template_file" > "$guide_output_file"
+
+sed "s/__NAME__/${name}/g" "$dependencies_template_file" > "$dependencies_output_file"
 
 # 데이터 추가
 # menu.ts 데이터 추가
@@ -119,3 +128,4 @@ echo "  📄 ${route_output_file}"
 echo "  📄 ${hook_template_file}"
 echo "  📄 ${example_output_file}"
 echo "  📄 ${guide_output_file}"
+echo "  📄 ${dependencies_output_file}"

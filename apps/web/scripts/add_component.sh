@@ -20,11 +20,13 @@ route_template_file="${PROJECT_ROOT}/templates/route/component/[name].tsx"
 component_template_file="${PROJECT_ROOT}/templates/registry/component/[name].tsx"
 example_template_file="${PROJECT_ROOT}/templates/registry/component/[name].example.tsx"
 guide_template_file="${PROJECT_ROOT}/templates/registry/component/[name].guide.md"
+dependencies_template_file="${PROJECT_ROOT}/templates/registry/component/[name].json"
 
 route_output_file="${PROJECT_ROOT}/src/routes/component/${name}.tsx"
 component_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.tsx"
 example_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.example.tsx"
 guide_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.guide.md"
+dependencies_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.json"
 
 menu_file="${PROJECT_ROOT}/src/data/componentsMenu.ts"  
 docs_map_file="${PROJECT_ROOT}/src/data/docsMap.ts" 
@@ -52,6 +54,11 @@ if [ ! -f "$guide_template_file" ]; then
     exit 1
 fi
 
+if [ ! -f "$dependencies_template_file" ]; then
+    echo "❌ 템플릿 파일을 찾을 수 없습니다: $dependencies_template_file"
+    exit 1
+fi
+
 # 출력 디렉토리 생성
 mkdir -p "${PROJECT_ROOT}/src/registry/components/${name}"
 
@@ -66,6 +73,8 @@ sed "s/__NAME__/${name}/g" "$component_template_file" > "$component_output_file"
 sed "s/__EXAMPLE__/${example}/g" "$example_template_file" > "$example_output_file"
 
 sed "s/__NAME__/${name}/g" "$guide_template_file" > "$guide_output_file"
+
+sed "s/__NAME__/${name}/g" "$dependencies_template_file" > "$dependencies_output_file"
 
 # 데이터 추가
 # menu.ts 데이터 추가
@@ -116,3 +125,4 @@ echo "  📄 ${route_output_file}"
 echo "  📄 ${component_output_file}"
 echo "  📄 ${example_output_file}"
 echo "  📄 ${guide_output_file}"
+echo "  📄 ${dependencies_output_file}"
