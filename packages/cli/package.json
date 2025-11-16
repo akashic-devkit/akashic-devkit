@@ -19,6 +19,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@antfu/ni": "^27.0.1",
     "commander": "^12.1.0",
     "inquirer": "^12.10.0",
     "node-fetch": "^3.3.2",

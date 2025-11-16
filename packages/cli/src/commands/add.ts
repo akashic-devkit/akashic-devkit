@@ -3,12 +3,8 @@ import { resolve } from "path";
 import { readConfig } from "../utils/config.js";
 import { confirm } from "../utils/prompts.js";
 import { logger } from "../utils/logger.js";
-import {
-  checkItemExists,
-  fetchFileFromRegistry,
-  fileExists,
-  saveFile,
-} from "../utils/registry.js";
+import { checkItemExists, fetchFileFromRegistry, fileExists, saveFile } from "../utils/registry.js";
+import { addDependencies } from "../utils/dependency.js";
 
 /**
  * Add command - Add a component or hook
@@ -57,9 +53,7 @@ export function addCommand(program: Command) {
 
         // Check if file already exists
         if (fileExists(targetPath)) {
-          const shouldOverwrite = await confirm(
-            `"${name}" already exists. Do you want to overwrite it?`
-          );
+          const shouldOverwrite = await confirm(`"${name}" already exists. Do you want to overwrite it?`);
 
           if (!shouldOverwrite) {
             logger.warn("Cancelled");
@@ -70,12 +64,14 @@ export function addCommand(program: Command) {
         // Fetch file content from registry
         const fetchSpinner = logger.spinner(`Fetching ${name}...`);
         fetchSpinner.start();
-        const content = await fetchFileFromRegistry(
-          name,
-          itemType,
-          extension
-        );
+        const content = (await fetchFileFromRegistry(name, itemType, extension)) as string;
         fetchSpinner.stop();
+
+        // Install dependencies
+        const installDependencySpinner = logger.spinner(`Installing ${name} dependencies...`);
+        installDependencySpinner.start();
+        addDependencies(name, itemType);
+        installDependencySpinner.stop();
 
         // Save file
         await saveFile(content, targetPath);
