@@ -9,7 +9,7 @@ interface DependencyJson {
 }
 
 export async function addDependencies(name: string, itemType: ItemType) {
-  const json = (await fetchFileFromRegistry(name, itemType, ".json")) as DependencyJson;
+  const json = (await fetchFileFromRegistry(name, itemType, "json")) as DependencyJson;
 
   if (!json || !json["dependencies"] || typeof json["dependencies"] !== "object") {
     throw new Error("Failed to get dependencies");

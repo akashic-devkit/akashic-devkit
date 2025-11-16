@@ -87,7 +87,7 @@ export async function fetchFileFromRegistry(
     throw new Error(`Failed to fetch "${name}": ${response.statusText}`);
   }
 
-  if (extension === ".json") {
+  if (extension === "json") {
     return await response.json();
   }
 

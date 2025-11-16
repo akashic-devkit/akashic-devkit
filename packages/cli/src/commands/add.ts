@@ -70,7 +70,7 @@ export function addCommand(program: Command) {
         // Install dependencies
         const installDependencySpinner = logger.spinner(`Installing ${name} dependencies...`);
         installDependencySpinner.start();
-        addDependencies(name, itemType);
+        await addDependencies(name, itemType);
         installDependencySpinner.stop();
 
         // Save file
