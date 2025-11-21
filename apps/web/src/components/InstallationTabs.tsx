@@ -1,0 +1,79 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Card, CardContent, CardHeader } from "./ui/card";
+import { Button } from "./ui/button";
+import { Check, Copy } from "lucide-react";
+import { useState } from "react";
+
+const PACKAGE_MANAGER_SUPPROTS = [
+  {
+    name: "npm",
+    command: "npx",
+  },
+  {
+    name: "pnpm",
+    command: "pnpm dlx",
+  },
+  {
+    name: "yarn",
+    command: "yarn",
+  },
+  {
+    name: "bun",
+    command: "bunx --bun",
+  },
+] as const;
+type PackageManagerType = (typeof PACKAGE_MANAGER_SUPPROTS)[number]["name"];
+
+const CLI_COMMAND = "akashic@latest add";
+
+interface Props {
+  name: string;
+}
+
+export default function InstallationTabs({ name }: Props) {
+  const [copied, setCopied] = useState(false);
+  const [tabValue, setTabValue] = useState<PackageManagerType>("npm");
+
+  const handleCopy = async () => {
+    if (copied) return;
+    try {
+      const packageCommand =
+        PACKAGE_MANAGER_SUPPROTS.find((item) => item.name === tabValue)?.command ?? "npm";
+      const copiedCommand = `${packageCommand} ${CLI_COMMAND} ${name}`;
+      await navigator.clipboard.writeText(copiedCommand);
+      setCopied(true);
+
+      setTimeout(() => {
+        setCopied(false);
+      }, 1000);
+    } catch (err) {
+      console.error("copy error:", err);
+    }
+  };
+
+  return (
+    <Tabs value={tabValue} onValueChange={(value) => setTabValue(value as PackageManagerType)}>
+      <Card className="p-1 m-0 w-full gap-0.5">
+        <CardHeader className="p-0 w-full flex items-center justify-between">
+          <TabsList>
+            {PACKAGE_MANAGER_SUPPROTS.map((item) => (
+              <TabsTrigger key={`tab-${item.name}`} value={item.name}>
+                {item.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <Button variant="ghost" size="icon" onClick={handleCopy}>
+            {!copied ? <Copy className="size-4" /> : <Check className="size-4" />}
+          </Button>
+        </CardHeader>
+        <CardContent className="px-2 py-3">
+          {PACKAGE_MANAGER_SUPPROTS.map((item) => (
+            <TabsContent key={`panel-${item.name}`} value={item.name}>
+              {`${item.command} ${CLI_COMMAND} ${name}`}
+            </TabsContent>
+          ))}
+        </CardContent>
+      </Card>
+    </Tabs>
+  );
+}

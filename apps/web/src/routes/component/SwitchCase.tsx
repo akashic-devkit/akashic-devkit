@@ -1,4 +1,5 @@
 import CodeTabs from "@/components/CodeTabs";
+import InstallationTabs from "@/components/InstallationTabs";
 import MarkdownViewer from "@/components/MarkdownViewer";
 import SwitchCaseExample from "@/registry/components/SwitchCase/SwitchCase.example";
 import { createFileRoute } from "@tanstack/react-router";
@@ -16,6 +17,11 @@ function RouteComponent() {
       <div>
         <h2 className="text-lg font-bold mb-2">Demo</h2>
         <CodeTabs type="Component" name="SwitchCase" exampleComponent={<SwitchCaseExample />} />
+      </div>
+      {/* installation */}
+      <div>
+        <h2 className="text-lg font-bold mb-2">Demo</h2>
+        <InstallationTabs name="SwitchCase" />
       </div>
       {/* docs */}
       <div>

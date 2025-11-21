@@ -1,4 +1,5 @@
 import CodeTabs from "@/components/CodeTabs";
+import InstallationTabs from "@/components/InstallationTabs";
 import MarkdownViewer from "@/components/MarkdownViewer";
 import UseMobileExample from "@/registry/hooks/useMobile/useMobile.example";
 import { createFileRoute } from "@tanstack/react-router";
@@ -16,6 +17,11 @@ function RouteComponent() {
       <div>
         <h2 className="text-lg font-bold mb-2">Demo</h2>
         <CodeTabs type="Hook" name="useMobile" exampleComponent={<UseMobileExample />} />
+      </div>
+      {/* installation */}
+      <div>
+        <h2 className="text-lg font-bold mb-2">Demo</h2>
+        <InstallationTabs name="useMobile" />
       </div>
       {/* docs */}
       <div>
