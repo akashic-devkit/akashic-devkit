@@ -9,17 +9,17 @@ import { addDependencies } from "../utils/dependency.js";
 /**
  * Add command - Add a component or hook
  */
-export function addCommand(program: Command) {
+export function addCommand(program: Command, cliName: string) {
   program
     .command("add <n>")
     .description("Add a component or hook")
-    .action(async (name: string, options, command) => {
+    .action(async (name: string, options, command) => { 
       try {
         // Validate arguments count
         const args = command.args;
         if (args.length !== 1) {
           logger.error("Expected exactly 1 argument");
-          logger.info("Usage: akashic add <component-or-hook-name>");
+          logger.info(`Usage: ${cliName} add <component-or-hook-name>`);
           process.exit(1);
         }
 

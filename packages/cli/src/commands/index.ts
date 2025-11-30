@@ -7,9 +7,9 @@ import { listCommand } from "./list.js";
 /**
  * Register all commands to the program
  */
-export function registerCommands(program: Command) {
-  infoCommand(program);
+export function registerCommands(program: Command, cliName: string) {
+  infoCommand(program, cliName);
   initCommand(program);
-  addCommand(program);
+  addCommand(program, cliName);
   listCommand(program);
 }

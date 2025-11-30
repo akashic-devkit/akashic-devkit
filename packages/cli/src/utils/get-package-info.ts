@@ -5,12 +5,12 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export async function getVersion() {
+export async function getPackageInfo() {
   try {
     const packageJsonPath = join(__dirname, "../package.json");
     const packageJson = await readFile(packageJsonPath, "utf-8");
-    return JSON.parse(packageJson).version;
+    return JSON.parse(packageJson);
   } catch {
-    return "0.0.1";
+    return null;
   }
 }

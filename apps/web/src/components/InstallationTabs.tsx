@@ -24,7 +24,7 @@ const PACKAGE_MANAGER_SUPPROTS = [
 ] as const;
 type PackageManagerType = (typeof PACKAGE_MANAGER_SUPPROTS)[number]["name"];
 
-const CLI_COMMAND = "akashic@latest add";
+const CLI_COMMAND = `${import.meta.env.VITE_CLI_NAME || "akashic"}@latest add`;
 
 interface Props {
   name: string;

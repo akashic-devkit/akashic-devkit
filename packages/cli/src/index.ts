@@ -1,14 +1,20 @@
 import { Command } from "commander";
-import { getVersion } from "./utils/version.js";
+import { getPackageInfo } from "./utils/get-package-info.js";
+
 import { registerCommands } from "./commands/index.js";
 
 const program = new Command();
 
-program
-  .name("akashic")
-  .description("Akashic DevKit CLI - Your personal component registry")
-  .version(await getVersion(), "-v, --Version", "Display version number");
+const packageInfo = await getPackageInfo();
+const name = packageInfo?.bin ? Object.keys(packageInfo.bin)[0] : "akashic";
+const version = packageInfo?.version || "0.0.1";
+const description = packageInfo?.description || "Akashic DevKit CLI";
 
-registerCommands(program);
+program
+  .name(name as string)
+  .description(description)
+  .version(version || "0.0.1", "-v, --Version", "Display version number");
+
+registerCommands(program, name as string);
 
 program.parse();
