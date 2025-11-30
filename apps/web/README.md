@@ -1,69 +1,55 @@
-# React + TypeScript + Vite
+# Akashic DevKit - Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the documentation website and component registry for Akashic DevKit. It serves two purposes:
+1.  **Documentation**: Showcases your components and hooks.
+2.  **Registry**: Serves the raw code of your components/hooks to the CLI.
 
-Currently, two official plugins are available:
+## Project Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```
+src/
+├── components/       # Your UI components
+├── hooks/            # Your custom hooks
+├── registry/         # Registry definition (auto-generated or manually maintained)
+└── ...
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
-
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+### Create New Component
+Generates a new component template in `src/components`.
+```bash
+pnpm create:component <component-name>
 ```
+
+### Create New Hook
+Generates a new hook template in `src/hooks`.
+```bash
+pnpm create:hook <hook-name>
+```
+
+### Clean Component
+Removes a component and its related files.
+```bash
+pnpm clean:component <component-name>
+```
+
+### Clean Hook
+Removes a hook and its related files.
+```bash
+pnpm clean:hook <hook-name>
+```
+
+## Environment Variables
+
+You can configure the CLI command name displayed in the installation tabs by setting the `VITE_CLI_NAME` environment variable.
+
+1.  Copy `.env.example` to `.env`:
+    ```bash
+    cp .env.example .env
+    ```
+2.  Edit `.env`:
+    ```env
+    VITE_CLI_NAME=your-cli-name
+    ```
+    (Default is `akashic`)
