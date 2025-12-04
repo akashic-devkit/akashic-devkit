@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HookIndexRouteImport } from './routes/hook/index'
 import { Route as ComponentIndexRouteImport } from './routes/component/index'
+import { Route as HookUsePageLeaveRouteImport } from './routes/hook/usePageLeave'
 import { Route as HookUseMobileRouteImport } from './routes/hook/useMobile'
 import { Route as ComponentSwitchCaseRouteImport } from './routes/component/SwitchCase'
 
@@ -30,6 +31,11 @@ const ComponentIndexRoute = ComponentIndexRouteImport.update({
   path: '/component/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HookUsePageLeaveRoute = HookUsePageLeaveRouteImport.update({
+  id: '/hook/usePageLeave',
+  path: '/hook/usePageLeave',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HookUseMobileRoute = HookUseMobileRouteImport.update({
   id: '/hook/useMobile',
   path: '/hook/useMobile',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/component/SwitchCase': typeof ComponentSwitchCaseRoute
   '/hook/useMobile': typeof HookUseMobileRoute
+  '/hook/usePageLeave': typeof HookUsePageLeaveRoute
   '/component': typeof ComponentIndexRoute
   '/hook': typeof HookIndexRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/component/SwitchCase': typeof ComponentSwitchCaseRoute
   '/hook/useMobile': typeof HookUseMobileRoute
+  '/hook/usePageLeave': typeof HookUsePageLeaveRoute
   '/component': typeof ComponentIndexRoute
   '/hook': typeof HookIndexRoute
 }
@@ -60,6 +68,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/component/SwitchCase': typeof ComponentSwitchCaseRoute
   '/hook/useMobile': typeof HookUseMobileRoute
+  '/hook/usePageLeave': typeof HookUsePageLeaveRoute
   '/component/': typeof ComponentIndexRoute
   '/hook/': typeof HookIndexRoute
 }
@@ -69,15 +78,23 @@ export interface FileRouteTypes {
     | '/'
     | '/component/SwitchCase'
     | '/hook/useMobile'
+    | '/hook/usePageLeave'
     | '/component'
     | '/hook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/component/SwitchCase' | '/hook/useMobile' | '/component' | '/hook'
+  to:
+    | '/'
+    | '/component/SwitchCase'
+    | '/hook/useMobile'
+    | '/hook/usePageLeave'
+    | '/component'
+    | '/hook'
   id:
     | '__root__'
     | '/'
     | '/component/SwitchCase'
     | '/hook/useMobile'
+    | '/hook/usePageLeave'
     | '/component/'
     | '/hook/'
   fileRoutesById: FileRoutesById
@@ -86,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ComponentSwitchCaseRoute: typeof ComponentSwitchCaseRoute
   HookUseMobileRoute: typeof HookUseMobileRoute
+  HookUsePageLeaveRoute: typeof HookUsePageLeaveRoute
   ComponentIndexRoute: typeof ComponentIndexRoute
   HookIndexRoute: typeof HookIndexRoute
 }
@@ -113,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hook/usePageLeave': {
+      id: '/hook/usePageLeave'
+      path: '/hook/usePageLeave'
+      fullPath: '/hook/usePageLeave'
+      preLoaderRoute: typeof HookUsePageLeaveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hook/useMobile': {
       id: '/hook/useMobile'
       path: '/hook/useMobile'
@@ -134,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ComponentSwitchCaseRoute: ComponentSwitchCaseRoute,
   HookUseMobileRoute: HookUseMobileRoute,
+  HookUsePageLeaveRoute: HookUsePageLeaveRoute,
   ComponentIndexRoute: ComponentIndexRoute,
   HookIndexRoute: HookIndexRoute,
 }
