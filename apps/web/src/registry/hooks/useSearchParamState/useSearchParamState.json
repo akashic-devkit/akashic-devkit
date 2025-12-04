@@ -1,0 +1,8 @@
+{
+  "name": "useSearchParamState",
+  "version": "0.1.0",
+  "dependencies": {
+    "react": ">=16.8.0",
+    "react-router-dom": ">=6.0.0"
+  }
+}
