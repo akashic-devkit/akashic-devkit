@@ -1,0 +1,38 @@
+name: Publish CLI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/cli/**'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build CLI
+        run: pnpm build:cli
+
+      - name: Publish CLI
+        run: |
+          cd packages/cli
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
