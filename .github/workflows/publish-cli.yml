@@ -8,6 +8,10 @@ on:
       - 'packages/cli/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -33,6 +37,4 @@ jobs:
       - name: Publish CLI
         run: |
           cd packages/cli
-          npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm publish --provenance --access public
