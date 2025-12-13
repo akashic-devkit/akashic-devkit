@@ -33,6 +33,17 @@ jobs:
       - name: Build CLI
         run: pnpm build:cli
 
+      - name: Debug Token
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "Error: NODE_AUTH_TOKEN is empty!"
+          else
+            echo "Success: NODE_AUTH_TOKEN is set. Length: ${#NODE_AUTH_TOKEN}"
+            echo "First 4 chars: ${NODE_AUTH_TOKEN:0:4}****"
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish CLI
         run: |
           cd packages/cli
