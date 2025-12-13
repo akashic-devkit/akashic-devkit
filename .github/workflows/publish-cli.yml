@@ -5,11 +5,12 @@ on:
     branches:
       - main
     paths:
-      - "packages/cli/**"
+      - 'packages/cli/**'
   workflow_dispatch:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   publish:
@@ -20,8 +21,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          registry-url: "https://registry.npmjs.org"
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
 
       - uses: pnpm/action-setup@v3
         with:
@@ -33,76 +34,7 @@ jobs:
       - name: Build CLI
         run: pnpm build:cli
 
-      - name: Debug - Check package.json
-        run: |
-          echo "=== Package.json contents ==="
-          cat packages/cli/package.json
-          echo ""
-          echo "=== Package name and version ==="
-          node -p "JSON.parse(require('fs').readFileSync('packages/cli/package.json')).name"
-          node -p "JSON.parse(require('fs').readFileSync('packages/cli/package.json')).version"
-
-      - name: Debug - Check build output
-        run: |
-          echo "=== Build output directory ==="
-          ls -la packages/cli/dist || echo "dist directory not found"
-          echo ""
-          echo "=== Files to be published ==="
-          cd packages/cli && npm pack --dry-run
-
-      - name: Debug - Token and Registry
-        run: |
-          echo "=== NPM Token Check ==="
-          if [ -z "$NODE_AUTH_TOKEN" ]; then
-            echo "❌ Error: NODE_AUTH_TOKEN is empty!"
-            exit 1
-          else
-            echo "✅ NODE_AUTH_TOKEN is set"
-            echo "Token length: ${#NODE_AUTH_TOKEN}"
-            echo "First 8 chars: ${NODE_AUTH_TOKEN:0:8}..."
-          fi
-          echo ""
-          echo "=== NPM Configuration ==="
-          npm config list
-          echo ""
-          echo "=== Registry URL ==="
-          npm config get registry
-          echo ""
-          echo "=== Whoami (this will fail if token is invalid) ==="
-          npm whoami || echo "Failed to authenticate"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Debug - Organization Access
-        run: |
-          echo "=== Checking organization access ==="
-          npm org ls @akashic-devkit || echo "Cannot access @akashic-devkit organization"
-          echo ""
-          echo "=== User teams ==="
-          npm team ls || echo "Cannot list teams"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Setup .npmrc
-        run: |
-          echo "=== Creating .npmrc ==="
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-          cat ~/.npmrc | sed 's/npm_[a-zA-Z0-9]*/npm_*****/g'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Publish CLI
         run: |
           cd packages/cli
-          echo "=== Publishing package ==="
-          echo "Current directory: $(pwd)"
-          echo "Publishing with public access..."
-          npm publish --access public --verbose
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Debug - Publish result
-        if: always()
-        run: |
-          echo "=== Checking if package was published ==="
-          npm view @akashic-devkit/cli || echo "Package not found in registry"
+          npm publish --provenance --access public
