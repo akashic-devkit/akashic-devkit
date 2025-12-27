@@ -1,6 +1,6 @@
 {
   "name": "@akashic-devkit/cli",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "Akashic DevKit CLI",
   "type": "module",
   "bin": {
@@ -14,7 +14,8 @@
     "dev": "tsup --watch",
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
-    "deploy": "npm publish"
+    "deploy": "npm publish",
+    "prepublishOnly": "npm run build"
   },
   "publishConfig": {
     "access": "public"
