@@ -81,7 +81,6 @@ const usePageLeave = ({
    */
   const onPageLeave = useCallback(() => {
     // 이미 실행되었거나 비활성화된 경우 early return
-    console.log("??");
     if (hasExecutedRef.current || !enabled) return;
     hasExecutedRef.current = true;
 
@@ -115,7 +114,8 @@ const usePageLeave = ({
             keepalive: true, // 페이지 언로드 후에도 요청 유지
             headers: payload instanceof Blob ? { "Content-Type": "application/json" } : undefined,
           }).catch((err) => {
-            console.error("Fallback fetch failed:", err);
+            const error = err instanceof Error ? err : new Error(String(err));
+            onError?.(error);
           });
         }
       }
