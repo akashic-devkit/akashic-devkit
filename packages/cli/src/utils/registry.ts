@@ -51,18 +51,8 @@ export async function getRegistryItems(type: ItemType): Promise<string[]> {
     const items = (await response.json()) as RegistryItem[];
     return items.filter((item) => item.type === "dir").map((item) => item.name);
   } catch (error: any) {
-    // Check for SSL/TLS related errors (undici stores actual error codes in error.cause.code)
-    const sslErrorCodes = [
-      "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
-      "SELF_SIGNED_CERT_IN_CHAIN",
-      "DEPTH_ZERO_SELF_SIGNED_CERT",
-      "CERT_HAS_EXPIRED",
-      "ERR_TLS_CERT_ALTNAME_INVALID",
-      "UNABLE_TO_GET_ISSUER_CERT",
-      "UNABLE_TO_GET_ISSUER_CERT_LOCALLY",
-    ];
-
-    if (error.cause?.code && sslErrorCodes.includes(error.cause.code)) {
+    // Check for SSL certificate errors (most SSL/TLS errors include 'CERT' in error code)
+    if (error.cause?.code?.includes('CERT')) {
       throw new Error(`
 SSL certificate verification failed: ${error.cause.message}
 
@@ -129,18 +119,8 @@ export async function fetchFileFromRegistry(
 
     return await response.text();
   } catch (error: any) {
-    // Check for SSL/TLS related errors (undici stores actual error codes in error.cause.code)
-    const sslErrorCodes = [
-      "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
-      "SELF_SIGNED_CERT_IN_CHAIN",
-      "DEPTH_ZERO_SELF_SIGNED_CERT",
-      "CERT_HAS_EXPIRED",
-      "ERR_TLS_CERT_ALTNAME_INVALID",
-      "UNABLE_TO_GET_ISSUER_CERT",
-      "UNABLE_TO_GET_ISSUER_CERT_LOCALLY",
-    ];
-
-    if (error.cause?.code && sslErrorCodes.includes(error.cause.code)) {
+    // Check for SSL certificate errors (most SSL/TLS errors include 'CERT' in error code)
+    if (error.cause?.code?.includes('CERT')) {
       throw new Error(`
 SSL certificate verification failed: ${error.cause.message}
 
