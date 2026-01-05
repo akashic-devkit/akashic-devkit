@@ -24,8 +24,8 @@
     "@antfu/ni": "^27.0.1",
     "commander": "^12.1.0",
     "inquirer": "^12.10.0",
-    "node-fetch": "^3.3.2",
-    "ora": "^9.0.0"
+    "ora": "^9.0.0",
+    "undici": "^6.22.0"
   },
   "devDependencies": {
     "@akashic-devkit/eslint-config": "workspace:*",

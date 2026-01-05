@@ -38,6 +38,18 @@ The CLI automatically detects the name from `package.json`.
 - **Web**: Deploy `apps/web` to Vercel or any static hosting.
 - **CLI**: Publish `@akashic-devkit/cli` to npm.
 
+## Troubleshooting
+
+### SSL Issues
+
+If you encounter SSL certificate verification errors when using the CLI, you can skip SSL verification:
+
+```bash
+AKASHIC_SKIP_SSL_VERIFY=1 akashic add button
+```
+
+**Warning**: This disables SSL certificate verification and should only be used in trusted environments.
+
 ## License
 
 MIT
