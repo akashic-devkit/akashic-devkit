@@ -1,6 +1,9 @@
 import { ItemType, fetchFileFromRegistry } from "./registry.js";
 import { execSync } from "child_process";
 import { detect } from "@antfu/ni";
+import { existsSync } from "fs";
+import { resolve } from "path";
+import { logger } from "./logger.js";
 
 interface DependencyJson {
   name: string;
@@ -9,38 +12,69 @@ interface DependencyJson {
 }
 
 export async function addDependencies(name: string, itemType: ItemType) {
+  const cwd = process.cwd();
+
+  // Check if package.json exists
+  const packageJsonPath = resolve(cwd, "package.json");
+  if (!existsSync(packageJsonPath)) {
+    throw new Error(
+      "No package.json found in current directory. Please run 'npm init' first."
+    );
+  }
+
   const json = (await fetchFileFromRegistry(name, itemType, "json")) as DependencyJson;
 
   if (!json || !json["dependencies"] || typeof json["dependencies"] !== "object") {
     throw new Error("Failed to get dependencies");
   }
 
-  const packageManager = (await detect({ cwd: process.cwd() })) || "npm";
+  const dependencies = json.dependencies;
+  const dependencyCount = Object.keys(dependencies).length;
 
-  const commands = Object.entries(json.dependencies).map(([packageName, version]) => {
-    const packageWithVersion = getInstallCommand(packageManager, packageName, version);
-    return packageWithVersion;
-  });
+  // No dependencies to install
+  if (dependencyCount === 0) {
+    return;
+  }
 
-  commands.forEach((command) => {
+  const packageManager = (await detect({ cwd })) || "npm";
+
+  // Build package list for batch installation
+  const packages = Object.entries(dependencies).map(
+    ([packageName, version]) => `${packageName}@${version}`
+  );
+
+  const command = getInstallCommand(packageManager, packages);
+
+  try {
     execSync(command, {
       stdio: "inherit",
-      cwd: process.cwd(),
+      cwd,
     });
-  });
+  } catch (error) {
+    logger.error("Failed to install dependencies");
+    logger.info("Possible reasons:");
+    logger.info("  - Network connection issue");
+    logger.info("  - Package not found in registry");
+    logger.info("  - Permission denied");
+    logger.break();
+    logger.info(`Attempted to install: ${packages.join(", ")}`);
+    throw new Error("Dependency installation failed");
+  }
 }
 
-function getInstallCommand(packageManager: string, packageName: string, version: string): string {
+function getInstallCommand(packageManager: string, packages: string[]): string {
+  const packagesStr = packages.join(" ");
+
   switch (packageManager) {
     case "yarn@berry":
     case "yarn":
-      return `yarn add ${packageName}@${version}`;
+      return `yarn add ${packagesStr}`;
     case "pnpm":
-      return `pnpm add ${packageName}@${version}`;
+      return `pnpm add ${packagesStr}`;
     case "bun":
-      return `bun add ${packageName}@${version}`;
+      return `bun add ${packagesStr}`;
     case "npm":
     default:
-      return `npm install ${packageName}@${version}`;
+      return `npm install ${packagesStr}`;
   }
 }
