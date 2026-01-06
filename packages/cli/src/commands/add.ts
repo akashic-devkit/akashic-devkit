@@ -13,7 +13,9 @@ export function addCommand(program: Command, cliName: string) {
   program
     .command("add <n>")
     .description("Add a component or hook")
-    .action(async (name: string, options, command) => { 
+    .option("--dry-run", "Show what would be installed without actually installing")
+    .option("--without-deps", "Add component/hook files without installing dependencies")
+    .action(async (name: string, options, command) => {
       try {
         // Validate arguments count
         const args = command.args;
@@ -45,41 +47,55 @@ export function addCommand(program: Command, cliName: string) {
           process.exit(1);
         }
 
-        // Resolve target path
-        // Convert @/components or @/hooks to src/components or src/hooks
-        const relativePath = targetAlias.replace("@/", "src/");
-        const fileName = `${name}.${extension}`;
-        const targetPath = resolve(cwd, relativePath, fileName);
+        let targetPath: string | undefined;
+        let content: string | undefined;
 
-        // Check if file already exists
-        if (fileExists(targetPath)) {
-          const shouldOverwrite = await confirm(`"${name}" already exists. Do you want to overwrite it?`);
+        // For without-deps mode, we still need file paths and content
+        if (!options.withoutDeps) {
+          // Resolve target path
+          // Convert @/components or @/hooks to src/components or src/hooks
+          const relativePath = targetAlias.replace("@/", "src/");
+          const fileName = `${name}.${extension}`;
+          targetPath = resolve(cwd, relativePath, fileName);
 
-          if (!shouldOverwrite) {
-            logger.warn("Cancelled");
-            return;
+          // Check if file already exists
+          if (fileExists(targetPath)) {
+            const shouldOverwrite = await confirm(`"${name}" already exists. Do you want to overwrite it?`);
+
+            if (!shouldOverwrite) {
+              logger.warn("Cancelled");
+              return;
+            }
           }
+
+          // Fetch file content from registry
+          const fetchSpinner = logger.spinner(`Fetching ${name}...`);
+          fetchSpinner.start();
+          content = (await fetchFileFromRegistry(name, itemType, extension)) as string;
+          fetchSpinner.stop();
         }
 
-        // Fetch file content from registry
-        const fetchSpinner = logger.spinner(`Fetching ${name}...`);
-        fetchSpinner.start();
-        const content = (await fetchFileFromRegistry(name, itemType, extension)) as string;
-        fetchSpinner.stop();
+        // Install dependencies (unless --without-deps is specified)
+        if (!options.withoutDeps) {
+          const installDependencySpinner = logger.spinner(`Installing ${name} dependencies...`);
+          installDependencySpinner.start();
+          await addDependencies(name, itemType, options.dryRun);
+          installDependencySpinner.stop();
+        } else {
+          logger.info("Skipping dependency installation (--without-deps flag)");
+        }
 
-        // Install dependencies
-        const installDependencySpinner = logger.spinner(`Installing ${name} dependencies...`);
-        installDependencySpinner.start();
-        await addDependencies(name, itemType);
-        installDependencySpinner.stop();
+        // Save file (unless dry-run)
+        if (!options.dryRun) {
+          await saveFile(content!, targetPath!);
 
-        // Save file
-        await saveFile(content, targetPath);
-
-        logger.success(`Added ${name}`, {
-          path: `${relativePath}/${fileName}`,
-          type: isHook ? "hook" : "component",
-        });
+          logger.success(`Added ${name}`, {
+            path: `${config.aliases[itemType].replace("@/", "src/")}/${name}.${extension}`,
+            type: isHook ? "hook" : "component",
+          });
+        } else {
+          logger.info(`Dry run mode - no files were created or modified`);
+        }
       } catch (error) {
         if (error instanceof Error) {
           logger.error(error.message);
