@@ -10,12 +10,15 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
     "dev": "tsup --watch",
-    "type-check": "tsc --noEmit",
+    "build": "tsup",
+    "check-types": "tsc --noEmit",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "fix:all": "pnpm lint:fix && pnpm format",
     "deploy": "npm publish",
-    "prepublishOnly": "npm run build"
+    "cli": "node dist/index.js"
   },
   "publishConfig": {
     "access": "public"
