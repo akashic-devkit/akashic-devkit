@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
+    "fix:all": "pnpm lint:fix && pnpm format",
     "preview": "vite preview",
     "create:component": "bash ./scripts/add_component.sh",
     "create:hook": "bash ./scripts/add_hook.sh",
