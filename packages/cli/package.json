@@ -18,7 +18,8 @@
     "format": "prettier --write .",
     "fix:all": "pnpm lint:fix && pnpm format",
     "deploy": "npm publish",
-    "cli": "node dist/index.js"
+    "cli": "node dist/index.js",
+    "changeset": "cd ../.. && changeset"
   },
   "publishConfig": {
     "access": "public"
