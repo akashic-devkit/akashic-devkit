@@ -12,9 +12,18 @@ const sampleAsyncFn = () => {
     setTimeout(() => {
       resolve([
         {
-          name: "john",
+          name: "John",
           age: 20,
           email: "john@gmail.com",
+        },
+        {
+          name: "Michael",
+          age: 23,
+        },
+        {
+          name: "Alice",
+          age: 21,
+          email: "alice@gmail.com",
         },
       ]);
     }, 300)
@@ -48,10 +57,14 @@ export default function QueryExample() {
                       <label>Age : </label>
                       <span>{item.age}</span>
                     </li>
-                    <li>
-                      <label>Email : </label>
-                      <span>{item.email}</span>
-                    </li>
+                    {item.email ? (
+                      <li>
+                        <label>Email : </label>
+                        <span>{item.email}</span>
+                      </li>
+                    ) : (
+                      <p>* no email</p>
+                    )}
                   </ul>
                 ));
             }
