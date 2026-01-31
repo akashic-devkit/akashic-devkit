@@ -2,10 +2,10 @@
 export const hooksMenu = [
   {
     title: "useMobile",
-    url: "/hook/useMobile",
+    url: "/hooks/useMobile",
   },
   {
     title: "usePageLeave",
-    url: "/hook/usePageLeave",
+    url: "/hooks/usePageLeave",
   },
 ];

@@ -1,10 +1,10 @@
 import CodeTabs from "@/components/CodeTabs";
 import InstallationTabs from "@/components/InstallationTabs";
 import MarkdownViewer from "@/components/MarkdownViewer";
-import SwitchCaseExample from "@/registry/components/SwitchCase/SwitchCase.example";
+import UsePageLeaveExample from "@/registry/hooks/usePageLeave/usePageLeave.example";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/component/SwitchCase")({
+export const Route = createFileRoute("/hooks/usePageLeave")({
   component: RouteComponent,
 });
 
@@ -12,21 +12,21 @@ function RouteComponent() {
   return (
     <>
       {/* title */}
-      <h1 className="text-2xl font-bold">SwitchCase</h1>
+      <h1 className="text-2xl font-bold">usePageLeave</h1>
       {/* demo */}
       <div>
         <h2 className="text-lg font-bold mb-2">Demo</h2>
-        <CodeTabs type="Component" name="SwitchCase" exampleComponent={<SwitchCaseExample />} />
+        <CodeTabs type="Hook" name="usePageLeave" exampleComponent={<UsePageLeaveExample />} />
       </div>
       {/* installation */}
       <div>
         <h2 className="text-lg font-bold mb-2">Demo</h2>
-        <InstallationTabs name="SwitchCase" />
+        <InstallationTabs name="usePageLeave" />
       </div>
       {/* docs */}
       <div>
         <h2 className="text-lg font-bold mb-2">Guide</h2>
-        <MarkdownViewer name="SwitchCase" />
+        <MarkdownViewer name="usePageLeave" />
       </div>
     </>
   );
