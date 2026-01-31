@@ -3,25 +3,13 @@ import { Card, CardContent, CardHeader } from "./ui/card";
 import { useState } from "react";
 import CopyButton from "./CopyButton";
 
-const PACKAGE_MANAGER_SUPPROTS = [
-  {
-    name: "npm",
-    command: "npx",
-  },
-  {
-    name: "pnpm",
-    command: "pnpm dlx",
-  },
-  {
-    name: "yarn",
-    command: "yarn",
-  },
-  {
-    name: "bun",
-    command: "bunx --bun",
-  },
-] as const;
-type PackageManagerType = (typeof PACKAGE_MANAGER_SUPPROTS)[number]["name"];
+const PACKAGE_MANAGER_COMMANDS = {
+  npm: "npx",
+  pnpm: "pnpm dlx",
+  yarn: "yarn",
+  bun: "bunx --bun",
+} as const;
+type PackageManagerType = keyof typeof PACKAGE_MANAGER_COMMANDS;
 
 const CLI_COMMAND = `${import.meta.env.VITE_CLI_NAME || "akashic"}@latest add`;
 
@@ -32,7 +20,7 @@ interface Props {
 export default function InstallationTabs({ name }: Props) {
   const [tabValue, setTabValue] = useState<PackageManagerType>("npm");
 
-  const packageCommand = PACKAGE_MANAGER_SUPPROTS.find((item) => item.name === tabValue)?.command ?? "npm";
+  const packageCommand = PACKAGE_MANAGER_COMMANDS[tabValue];
   const copiedCommand = `${packageCommand} ${CLI_COMMAND} ${name}`;
 
   return (
@@ -40,20 +28,22 @@ export default function InstallationTabs({ name }: Props) {
       <Card className="p-1 m-0 w-full gap-0.5">
         <CardHeader className="p-0 w-full flex items-center justify-between">
           <TabsList>
-            {PACKAGE_MANAGER_SUPPROTS.map((item) => (
-              <TabsTrigger key={`tab-${item.name}`} value={item.name}>
-                {item.name}
+            {Object.keys(PACKAGE_MANAGER_COMMANDS).map((name) => (
+              <TabsTrigger key={`tab-${name}`} value={name}>
+                {name}
               </TabsTrigger>
             ))}
           </TabsList>
           <CopyButton copyText={copiedCommand} />
         </CardHeader>
         <CardContent className="px-2 py-3">
-          {PACKAGE_MANAGER_SUPPROTS.map((item) => (
-            <TabsContent key={`panel-${item.name}`} value={item.name}>
-              {`${item.command} ${CLI_COMMAND} ${name}`}
-            </TabsContent>
-          ))}
+          {(Object.entries(PACKAGE_MANAGER_COMMANDS) as [PackageManagerType, string][]).map(
+            ([name, command]) => (
+              <TabsContent key={`panel-${name}`} value={name}>
+                {`${command} ${CLI_COMMAND} ${name}`}
+              </TabsContent>
+            )
+          )}
         </CardContent>
       </Card>
     </Tabs>
