@@ -33,11 +33,13 @@ export default function AppBreadcrumb() {
           </BreadcrumbLink>
         </BreadcrumbItem>
         {pathList.map((path, idx) => {
-          const pathText =
-            idx === 0 ? path.charAt(0).toUpperCase() + path.slice(1).toLowerCase() + "s" : path;
+          const isFirstCategory = idx === 0;
+          const pathText = isFirstCategory
+            ? path.charAt(0).toUpperCase() + path.slice(1).toLowerCase()
+            : path;
           const link = ["", ...pathList.slice(0, idx + 1)].join("/");
 
-          if (idx === 0) {
+          if (isFirstCategory) {
             return (
               <Fragment key={path}>
                 <BreadcrumbSeparator />
