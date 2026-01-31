@@ -1,8 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Card, CardContent, CardHeader } from "./ui/card";
-import { Button } from "./ui/button";
-import { Check, Copy } from "lucide-react";
 import { useState } from "react";
+import CopyButton from "./CopyButton";
 
 const PACKAGE_MANAGER_COMMANDS = {
   npm: "npx",
@@ -19,24 +18,10 @@ interface Props {
 }
 
 export default function InstallationTabs({ name }: Props) {
-  const [copied, setCopied] = useState(false);
   const [tabValue, setTabValue] = useState<PackageManagerType>("npm");
 
-  const handleCopy = async () => {
-    if (copied) return;
-    try {
-      const packageCommand = PACKAGE_MANAGER_COMMANDS[tabValue];
-      const copiedCommand = `${packageCommand} ${CLI_COMMAND} ${name}`;
-      await navigator.clipboard.writeText(copiedCommand);
-      setCopied(true);
-
-      setTimeout(() => {
-        setCopied(false);
-      }, 1000);
-    } catch (err) {
-      console.error("copy error:", err);
-    }
-  };
+  const packageCommand = PACKAGE_MANAGER_COMMANDS[tabValue];
+  const copiedCommand = `${packageCommand} ${CLI_COMMAND} ${name}`;
 
   return (
     <Tabs value={tabValue} onValueChange={(value) => setTabValue(value as PackageManagerType)}>
@@ -49,9 +34,7 @@ export default function InstallationTabs({ name }: Props) {
               </TabsTrigger>
             ))}
           </TabsList>
-          <Button variant="ghost" size="icon" onClick={handleCopy}>
-            {!copied ? <Copy className="size-4" /> : <Check className="size-4" />}
-          </Button>
+          <CopyButton text={copiedCommand} />
         </CardHeader>
         <CardContent className="px-2 py-3">
           {(Object.entries(PACKAGE_MANAGER_COMMANDS) as [PackageManagerType, string][]).map(

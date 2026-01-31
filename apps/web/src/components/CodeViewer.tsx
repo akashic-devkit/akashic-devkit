@@ -4,8 +4,7 @@ import { vs } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Card, CardContent } from "./ui/card";
 import { rawCodesMap } from "@/data/rawCodesMap";
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { Copy } from "lucide-react";
+import CopyButton from "./CopyButton";
 
 interface BaseProps {
   label?: string;
@@ -48,11 +47,7 @@ export default function CodeViewer({ type, code, fileName, language = "typescrip
 
   return (
     <Card className="p-0 relative">
-      {!loadErr && (
-        <Button size="icon" className="absolute right-2 top-2" variant="outline">
-          <Copy />
-        </Button>
-      )}
+      {!loadErr && <CopyButton className="absolute right-1 top-1" text={codeStr} />}
       <CardContent className="p-2">
         {loadErr ? (
           <div className="text-destructive">Error: {loadErr}</div>
