@@ -3,35 +3,28 @@ name: Changeset Bot
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened]
 
 permissions:
-  contents: write
   pull-requests: write
 
 jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: "pnpm"
 
       - run: pnpm install
 
-      # Changesets가 자동으로 코멘트 생성
-      - name: Comment with changeset info
-        uses: changesets/action@v1
-        with:
-          version: echo "Checking changesets"
+      - uses: changesets/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
