@@ -1,21 +1,20 @@
-import React, { useState } from "react";
-import { Button, buttonVariants } from "./ui/button";
+import { useState } from "react";
+import { Button } from "./ui/button";
 import { Copy, Check } from "lucide-react";
-import { VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-type Props = Pick<React.ComponentProps<"button">, "className"> &
-  Pick<VariantProps<typeof buttonVariants>, "size" | "variant"> & {
-    copyText: string;
-  };
+interface Props {
+  className?: string;
+  text: string;
+}
 
-export default function CopyButton({ className, variant = "ghost", size = "icon", copyText }: Props) {
+export default function CopyButton({ className, text }: Props) {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = async (copyText: string) => {
+  const handleCopy = async (text: string) => {
     if (copied) return;
     try {
-      await navigator.clipboard.writeText(copyText);
+      await navigator.clipboard.writeText(text);
       setCopied(true);
 
       setTimeout(() => {
@@ -27,12 +26,7 @@ export default function CopyButton({ className, variant = "ghost", size = "icon"
   };
 
   return (
-    <Button
-      className={cn(className, "[&_svg]:size:4")}
-      variant={variant}
-      size={size}
-      onClick={() => handleCopy(copyText)}
-    >
+    <Button className={cn(className, "[&_svg]:size-4")} variant="ghost" onClick={() => handleCopy(text)}>
       {!copied ? <Copy /> : <Check />}
     </Button>
   );

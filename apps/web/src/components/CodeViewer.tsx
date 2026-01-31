@@ -47,7 +47,7 @@ export default function CodeViewer({ type, code, fileName, language = "typescrip
 
   return (
     <Card className="p-0 relative">
-      {!loadErr && <CopyButton className="absolute right-1 top-1" copyText={codeStr} />}
+      {!loadErr && <CopyButton className="absolute right-1 top-1" text={codeStr} />}
       <CardContent className="p-2">
         {loadErr ? (
           <div className="text-destructive">Error: {loadErr}</div>

@@ -34,7 +34,7 @@ export default function InstallationTabs({ name }: Props) {
               </TabsTrigger>
             ))}
           </TabsList>
-          <CopyButton copyText={copiedCommand} />
+          <CopyButton text={copiedCommand} />
         </CardHeader>
         <CardContent className="px-2 py-3">
           {(Object.entries(PACKAGE_MANAGER_COMMANDS) as [PackageManagerType, string][]).map(
