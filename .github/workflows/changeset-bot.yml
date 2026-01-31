@@ -1,4 +1,3 @@
-# .github/workflows/changeset-bot.yml
 name: Changeset Bot
 
 on:
@@ -7,28 +6,14 @@ on:
 
 permissions:
   pull-requests: write
+  contents: read
 
 jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - uses: posita/changeset-status-action@v1
         with:
-          fetch-depth: 0
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: "pnpm"
-
-      - run: pnpm install
-
-      # Changesets가 자동으로 코멘트 생성
-      - name: Comment with changeset info
-        uses: changesets/action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
