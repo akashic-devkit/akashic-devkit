@@ -22,7 +22,7 @@ docs_map_file="${PROJECT_ROOT}/src/data/docsMap.ts"
 codes_map_file="${PROJECT_ROOT}/src/data/rawCodesMap.ts" 
 
 # 삭제할 대상이 존재하는지 확인
-if [[ ! -d "$component_dir" ]; then
+if [ ! -d "$component_dir" ]; then
     echo "❌ 삭제할 컴포넌트를 찾을 수 없습니다."
     echo "   - Component 디렉토리: $component_dir"
     exit 1
@@ -44,7 +44,7 @@ error_occurred=0
 # 메뉴 파일 수정
 # menu.ts에서 해당 컴포넌트 항목 삭제
 echo "🔄 menu.ts 업데이트 중..."
-if perl -i.bak -0pe "s/  \{\s+title: \"$name\",\s+url: \"\/component\/$name\",\s+\},\n//gs" "$menu_file"; then
+if perl -i.bak -0pe "s/  \{\s+title: \"$name\",\s+url: \"\/components\/$name\",\s+\},\n//gs" "$menu_file"; then
     echo "✅ menu.ts 업데이트 완료"
     rm -f "${menu_file}.bak"
 else

@@ -48,7 +48,7 @@ error_occurred=0
 # 메뉴 파일 수정
 # menu.ts에서 해당 컴포넌트 항목 삭제
 echo "🔄 menu.ts 업데이트 중..."
-if perl -i.bak -0pe "s/  \{\s+title: \"$name\",\s+url: \"\/hook\/$name\",\s+\},\n//gs" "$menu_file"; then
+if perl -i.bak -0pe "s/  \{\s+title: \"$name\",\s+url: \"\/hooks\/$name\",\s+\},\n//gs" "$menu_file"; then
     echo "✅ menu.ts 업데이트 완료"
     rm -f "${menu_file}.bak"
 else

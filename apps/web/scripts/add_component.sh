@@ -71,7 +71,7 @@ if ! grep -q "\"$name\"" "$menu_file"; then
     /^];/ {
         print "  {"
         print "    title: \"" name "\","
-        print "    url: \"/component/" name "\","
+        print "    url: \"/components/" name "\","
         print "  },"
     }
     { print }
