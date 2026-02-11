@@ -36,13 +36,11 @@ export default function InstallationTabs({ moduleName }: Props) {
           <CopyButton text={copiedCommand} />
         </CardHeader>
         <CardContent className="px-2 py-3">
-          {(Object.entries(PACKAGE_MANAGER_COMMANDS) as [PackageManagerType, string][]).map(
-            ([name, command]) => (
-              <TabsContent key={`panel-${name}`} value={name}>
-                {`${command} ${CLI_COMMAND} ${name}`}
-              </TabsContent>
-            )
-          )}
+          {Object.keys(PACKAGE_MANAGER_COMMANDS).map((name) => (
+            <TabsContent key={`panel-${name}`} value={name}>
+              {copiedCommand}
+            </TabsContent>
+          ))}
         </CardContent>
       </Card>
     </Tabs>
