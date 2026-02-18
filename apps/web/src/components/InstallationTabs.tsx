@@ -14,15 +14,14 @@ type PackageManagerType = keyof typeof PACKAGE_MANAGER_COMMANDS;
 const CLI_COMMAND = `${import.meta.env.VITE_CLI_NAME || "akashic"}@latest add`;
 
 interface Props {
-  name: string;
+  moduleName: string;
 }
 
-export default function InstallationTabs({ name }: Props) {
+export default function InstallationTabs({ moduleName }: Props) {
   const [tabValue, setTabValue] = useState<PackageManagerType>("npm");
 
   const packageCommand = PACKAGE_MANAGER_COMMANDS[tabValue];
-  const copiedCommand = `${packageCommand} ${CLI_COMMAND} ${name}`;
-
+  const copiedCommand = `${packageCommand} ${CLI_COMMAND} ${moduleName}`;
   return (
     <Tabs value={tabValue} onValueChange={(value) => setTabValue(value as PackageManagerType)}>
       <Card className="p-1 m-0 w-full gap-0.5">
@@ -37,13 +36,11 @@ export default function InstallationTabs({ name }: Props) {
           <CopyButton text={copiedCommand} />
         </CardHeader>
         <CardContent className="px-2 py-3">
-          {(Object.entries(PACKAGE_MANAGER_COMMANDS) as [PackageManagerType, string][]).map(
-            ([name, command]) => (
-              <TabsContent key={`panel-${name}`} value={name}>
-                {`${command} ${CLI_COMMAND} ${name}`}
-              </TabsContent>
-            )
-          )}
+          {Object.keys(PACKAGE_MANAGER_COMMANDS).map((name) => (
+            <TabsContent key={`panel-${name}`} value={name}>
+              {copiedCommand}
+            </TabsContent>
+          ))}
         </CardContent>
       </Card>
     </Tabs>
