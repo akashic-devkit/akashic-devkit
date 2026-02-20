@@ -1,5 +1,11 @@
 # @akashic-devkit/cli
 
+## 1.0.8
+
+### Patch Changes
+
+- 097212a: pipeline 환경변수 수정
+
 ## 1.0.7
 
 ### Patch Changes
