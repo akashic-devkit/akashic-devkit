@@ -1,5 +1,11 @@
 # @akashic-devkit/cli
 
+## 1.1.0
+
+### Minor Changes
+
+- 9ca295f: changeset을 활용한 npm 패키지 배포 자동화
+
 ## 1.0.8
 
 ### Patch Changes
