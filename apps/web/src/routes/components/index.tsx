@@ -1,7 +1,7 @@
 import ListOverview from "@/components/ListOverview";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/component/")({
+export const Route = createFileRoute("/components/")({
   component: RouteComponent,
 });
 

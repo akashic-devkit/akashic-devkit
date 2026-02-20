@@ -10,102 +10,89 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as HookIndexRouteImport } from './routes/hook/index'
-import { Route as ComponentIndexRouteImport } from './routes/component/index'
-import { Route as HookUsePageLeaveRouteImport } from './routes/hook/usePageLeave'
-import { Route as HookUseMobileRouteImport } from './routes/hook/useMobile'
-import { Route as ComponentSwitchCaseRouteImport } from './routes/component/SwitchCase'
+import { Route as HooksIndexRouteImport } from './routes/hooks/index'
+import { Route as ComponentsIndexRouteImport } from './routes/components/index'
+import { Route as HooksHookNameRouteImport } from './routes/hooks/$hookName'
+import { Route as ComponentsComponentNameRouteImport } from './routes/components/$componentName'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HookIndexRoute = HookIndexRouteImport.update({
-  id: '/hook/',
-  path: '/hook/',
+const HooksIndexRoute = HooksIndexRouteImport.update({
+  id: '/hooks/',
+  path: '/hooks/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ComponentIndexRoute = ComponentIndexRouteImport.update({
-  id: '/component/',
-  path: '/component/',
+const ComponentsIndexRoute = ComponentsIndexRouteImport.update({
+  id: '/components/',
+  path: '/components/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HookUsePageLeaveRoute = HookUsePageLeaveRouteImport.update({
-  id: '/hook/usePageLeave',
-  path: '/hook/usePageLeave',
+const HooksHookNameRoute = HooksHookNameRouteImport.update({
+  id: '/hooks/$hookName',
+  path: '/hooks/$hookName',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HookUseMobileRoute = HookUseMobileRouteImport.update({
-  id: '/hook/useMobile',
-  path: '/hook/useMobile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ComponentSwitchCaseRoute = ComponentSwitchCaseRouteImport.update({
-  id: '/component/SwitchCase',
-  path: '/component/SwitchCase',
+const ComponentsComponentNameRoute = ComponentsComponentNameRouteImport.update({
+  id: '/components/$componentName',
+  path: '/components/$componentName',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/component/SwitchCase': typeof ComponentSwitchCaseRoute
-  '/hook/useMobile': typeof HookUseMobileRoute
-  '/hook/usePageLeave': typeof HookUsePageLeaveRoute
-  '/component': typeof ComponentIndexRoute
-  '/hook': typeof HookIndexRoute
+  '/components/$componentName': typeof ComponentsComponentNameRoute
+  '/hooks/$hookName': typeof HooksHookNameRoute
+  '/components': typeof ComponentsIndexRoute
+  '/hooks': typeof HooksIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/component/SwitchCase': typeof ComponentSwitchCaseRoute
-  '/hook/useMobile': typeof HookUseMobileRoute
-  '/hook/usePageLeave': typeof HookUsePageLeaveRoute
-  '/component': typeof ComponentIndexRoute
-  '/hook': typeof HookIndexRoute
+  '/components/$componentName': typeof ComponentsComponentNameRoute
+  '/hooks/$hookName': typeof HooksHookNameRoute
+  '/components': typeof ComponentsIndexRoute
+  '/hooks': typeof HooksIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/component/SwitchCase': typeof ComponentSwitchCaseRoute
-  '/hook/useMobile': typeof HookUseMobileRoute
-  '/hook/usePageLeave': typeof HookUsePageLeaveRoute
-  '/component/': typeof ComponentIndexRoute
-  '/hook/': typeof HookIndexRoute
+  '/components/$componentName': typeof ComponentsComponentNameRoute
+  '/hooks/$hookName': typeof HooksHookNameRoute
+  '/components/': typeof ComponentsIndexRoute
+  '/hooks/': typeof HooksIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/component/SwitchCase'
-    | '/hook/useMobile'
-    | '/hook/usePageLeave'
-    | '/component'
-    | '/hook'
+    | '/components/$componentName'
+    | '/hooks/$hookName'
+    | '/components'
+    | '/hooks'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/component/SwitchCase'
-    | '/hook/useMobile'
-    | '/hook/usePageLeave'
-    | '/component'
-    | '/hook'
+    | '/components/$componentName'
+    | '/hooks/$hookName'
+    | '/components'
+    | '/hooks'
   id:
     | '__root__'
     | '/'
-    | '/component/SwitchCase'
-    | '/hook/useMobile'
-    | '/hook/usePageLeave'
-    | '/component/'
-    | '/hook/'
+    | '/components/$componentName'
+    | '/hooks/$hookName'
+    | '/components/'
+    | '/hooks/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ComponentSwitchCaseRoute: typeof ComponentSwitchCaseRoute
-  HookUseMobileRoute: typeof HookUseMobileRoute
-  HookUsePageLeaveRoute: typeof HookUsePageLeaveRoute
-  ComponentIndexRoute: typeof ComponentIndexRoute
-  HookIndexRoute: typeof HookIndexRoute
+  ComponentsComponentNameRoute: typeof ComponentsComponentNameRoute
+  HooksHookNameRoute: typeof HooksHookNameRoute
+  ComponentsIndexRoute: typeof ComponentsIndexRoute
+  HooksIndexRoute: typeof HooksIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -117,39 +104,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/hook/': {
-      id: '/hook/'
-      path: '/hook'
-      fullPath: '/hook'
-      preLoaderRoute: typeof HookIndexRouteImport
+    '/hooks/': {
+      id: '/hooks/'
+      path: '/hooks'
+      fullPath: '/hooks'
+      preLoaderRoute: typeof HooksIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/component/': {
-      id: '/component/'
-      path: '/component'
-      fullPath: '/component'
-      preLoaderRoute: typeof ComponentIndexRouteImport
+    '/components/': {
+      id: '/components/'
+      path: '/components'
+      fullPath: '/components'
+      preLoaderRoute: typeof ComponentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/hook/usePageLeave': {
-      id: '/hook/usePageLeave'
-      path: '/hook/usePageLeave'
-      fullPath: '/hook/usePageLeave'
-      preLoaderRoute: typeof HookUsePageLeaveRouteImport
+    '/hooks/$hookName': {
+      id: '/hooks/$hookName'
+      path: '/hooks/$hookName'
+      fullPath: '/hooks/$hookName'
+      preLoaderRoute: typeof HooksHookNameRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/hook/useMobile': {
-      id: '/hook/useMobile'
-      path: '/hook/useMobile'
-      fullPath: '/hook/useMobile'
-      preLoaderRoute: typeof HookUseMobileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/component/SwitchCase': {
-      id: '/component/SwitchCase'
-      path: '/component/SwitchCase'
-      fullPath: '/component/SwitchCase'
-      preLoaderRoute: typeof ComponentSwitchCaseRouteImport
+    '/components/$componentName': {
+      id: '/components/$componentName'
+      path: '/components/$componentName'
+      fullPath: '/components/$componentName'
+      preLoaderRoute: typeof ComponentsComponentNameRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -157,11 +137,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ComponentSwitchCaseRoute: ComponentSwitchCaseRoute,
-  HookUseMobileRoute: HookUseMobileRoute,
-  HookUsePageLeaveRoute: HookUsePageLeaveRoute,
-  ComponentIndexRoute: ComponentIndexRoute,
-  HookIndexRoute: HookIndexRoute,
+  ComponentsComponentNameRoute: ComponentsComponentNameRoute,
+  HooksHookNameRoute: HooksHookNameRoute,
+  ComponentsIndexRoute: ComponentsIndexRoute,
+  HooksIndexRoute: HooksIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

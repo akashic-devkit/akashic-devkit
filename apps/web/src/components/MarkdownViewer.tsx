@@ -2,38 +2,19 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github.css";
-import { useEffect, useState } from "react";
-import { docsMap } from "@/data/docsMap";
 
 interface Props {
-  name: string;
+  rawMarkdown: string;
 }
 
-export default function MarkdownViewer({ name }: Props) {
-  const [markdown, setMarkdown] = useState("");
-
-  const loadFromFile = async () => {
-    try {
-      const key = name as keyof typeof docsMap;
-      const module = await docsMap[key]();
-      setMarkdown(module.default);
-    } catch {
-      //   setCodeStr("");
-      //   setLoadErr("파일을 표시할 수 없습니다.");
-    }
-  };
-
-  useEffect(() => {
-    loadFromFile();
-  }, []);
-
+export default function MarkdownViewer({ rawMarkdown }: Props) {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]} // GitHub Flavored Markdown 지원
       rehypePlugins={[rehypeHighlight]} // 코드 하이라이팅
       components={components}
     >
-      {markdown}
+      {rawMarkdown}
     </ReactMarkdown>
   );
 }

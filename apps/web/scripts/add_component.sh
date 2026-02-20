@@ -16,13 +16,11 @@ fi
 name=$1
 example="${name}Example"
 
-route_template_file="${PROJECT_ROOT}/templates/route/component/[name].tsx"
 component_template_file="${PROJECT_ROOT}/templates/registry/component/[name].tsx"
 example_template_file="${PROJECT_ROOT}/templates/registry/component/[name].example.tsx"
 guide_template_file="${PROJECT_ROOT}/templates/registry/component/[name].guide.md"
 dependencies_template_file="${PROJECT_ROOT}/templates/registry/component/[name].json"
 
-route_output_file="${PROJECT_ROOT}/src/routes/component/${name}.tsx"
 component_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.tsx"
 example_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.example.tsx"
 guide_output_file="${PROJECT_ROOT}/src/registry/components/${name}/${name}.guide.md"
@@ -34,11 +32,6 @@ codes_map_file="${PROJECT_ROOT}/src/data/rawCodesMap.ts"
 
 
 # 템플릿 파일 존재 확인
-if [ ! -f "$route_template_file" ]; then
-    echo "❌ 템플릿 파일을 찾을 수 없습니다: $route_template_file"
-    exit 1
-fi
-
 if [ ! -f "$component_template_file" ]; then
     echo "❌ 템플릿 파일을 찾을 수 없습니다: $component_template_file"
     exit 1
@@ -63,11 +56,6 @@ fi
 mkdir -p "${PROJECT_ROOT}/src/registry/components/${name}"
 
 # 템플릿의 변수값을 치환하여 파일 생성
-sed -e "1d" \
-    -e "s/__NAME__/${name}/g" \
-    -e "s/__EXAMPLE__/${example}/g" \
-    "$route_template_file" > "$route_output_file"
-
 sed "s/__NAME__/${name}/g" "$component_template_file" > "$component_output_file"
 
 sed "s/__EXAMPLE__/${example}/g" "$example_template_file" > "$example_output_file"
@@ -83,7 +71,7 @@ if ! grep -q "\"$name\"" "$menu_file"; then
     /^];/ {
         print "  {"
         print "    title: \"" name "\","
-        print "    url: \"/component/" name "\","
+        print "    url: \"/components/" name "\","
         print "  },"
     }
     { print }
@@ -121,7 +109,6 @@ fi
     
 
 echo "✅ 컴포넌트 파일들이 생성되었습니다!"
-echo "  📄 ${route_output_file}"
 echo "  📄 ${component_output_file}"
 echo "  📄 ${example_output_file}"
 echo "  📄 ${guide_output_file}"

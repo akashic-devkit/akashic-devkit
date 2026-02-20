@@ -19,13 +19,11 @@ rest="${name:1}"
 Name="${first}${rest}"
 example="${Name}Example"
 
-route_template_file="${PROJECT_ROOT}/templates/route/hook/[name].tsx"
 hook_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].ts"
 example_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].example.tsx"
 guide_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].guide.md"
 dependencies_template_file="${PROJECT_ROOT}/templates/registry/hook/[name].json"
 
-route_output_file="${PROJECT_ROOT}/src/routes/hook/${name}.tsx"
 hook_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.ts"
 example_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.example.tsx"
 guide_output_file="${PROJECT_ROOT}/src/registry/hooks/${name}/${name}.guide.md"
@@ -37,11 +35,6 @@ codes_map_file="${PROJECT_ROOT}/src/data/rawCodesMap.ts"
 
 
 # 템플릿 파일 존재 확인
-if [ ! -f "$route_template_file" ]; then
-    echo "❌ 템플릿 파일을 찾을 수 없습니다: $route_template_file"
-    exit 1
-fi
-
 if [ ! -f "$hook_template_file" ]; then
     echo "❌ 템플릿 파일을 찾을 수 없습니다: $hook_template_file"
     exit 1
@@ -66,11 +59,6 @@ fi
 mkdir -p "${PROJECT_ROOT}/src/registry/hooks/${name}"
 
 # 템플릿의 변수값을 치환하여 파일 생성
-sed -e "1d" \
-    -e "s/__NAME__/${name}/g" \
-    -e "s/__EXAMPLE__/${example}/g" \
-    "$route_template_file" > "$route_output_file"
-
 sed "s/__NAME__/${name}/g" "$hook_template_file" > "$hook_output_file"
 
 sed "s/__EXAMPLE__/${example}/g" "$example_template_file" > "$example_output_file"
@@ -86,7 +74,7 @@ if ! grep -q "\"$name\"" "$menu_file"; then
     /^];/ {
         print "  {"
         print "    title: \"" name "\","
-        print "    url: \"/hook/" name "\","
+        print "    url: \"/hooks/" name "\","
         print "  },"
     }
     { print }
@@ -124,7 +112,6 @@ fi
     
 
 echo "✅ 컴포넌트 파일들이 생성되었습니다!"
-echo "  📄 ${route_output_file}"
 echo "  📄 ${hook_template_file}"
 echo "  📄 ${example_output_file}"
 echo "  📄 ${guide_output_file}"

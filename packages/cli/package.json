@@ -1,6 +1,6 @@
 {
   "name": "@akashic-devkit/cli",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Akashic DevKit CLI",
   "type": "module",
   "bin": {
@@ -10,12 +10,16 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
     "dev": "tsup --watch",
-    "type-check": "tsc --noEmit",
+    "build": "tsup",
+    "check-types": "tsc --noEmit",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "fix:all": "pnpm lint:fix && pnpm format",
     "deploy": "npm publish",
-    "prepublishOnly": "npm run build"
+    "cli": "node dist/index.js",
+    "changeset": "cd ../.. && changeset"
   },
   "publishConfig": {
     "access": "public"
@@ -24,13 +28,15 @@
     "@antfu/ni": "^27.0.1",
     "commander": "^12.1.0",
     "inquirer": "^12.10.0",
-    "node-fetch": "^3.3.2",
-    "ora": "^9.0.0"
+    "ora": "^9.0.0",
+    "semver": "^7.7.3",
+    "undici": "^6.22.0"
   },
   "devDependencies": {
     "@akashic-devkit/eslint-config": "workspace:*",
     "@akashic-devkit/typescript-config": "workspace:*",
     "@types/node": "^22.10.2",
+    "@types/semver": "^7.7.1",
     "eslint": "^9.34.0",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"

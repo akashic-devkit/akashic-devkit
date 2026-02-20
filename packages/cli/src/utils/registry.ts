@@ -1,5 +1,4 @@
-import fetch from "node-fetch";
-import https from "https";
+import { Agent } from "undici";
 import { existsSync } from "fs";
 import { mkdir, writeFile } from "fs/promises";
 import { dirname, resolve } from "path";
@@ -15,10 +14,21 @@ interface RegistryItem {
   type: string;
 }
 
-// SSL 인증서 검증 무시를 위한 agent
-const httpsAgent = new https.Agent({
-  rejectUnauthorized: false,
-});
+// Skip SSL certificate verification (controlled by environment variable)
+// Required only in specific environments like corporate proxies: AKASHIC_SKIP_SSL_VERIFY=1
+const dispatcher =
+  process.env.AKASHIC_SKIP_SSL_VERIFY === "1"
+    ? new Agent({
+        connect: {
+          rejectUnauthorized: false,
+        },
+      })
+    : undefined;
+
+// Display warning when SSL verification is skipped
+if (process.env.AKASHIC_SKIP_SSL_VERIFY === "1") {
+  console.warn("⚠️  Warning: SSL certificate verification is disabled");
+}
 
 /**
  * Get all items from registry by type
@@ -26,19 +36,34 @@ const httpsAgent = new https.Agent({
 export async function getRegistryItems(type: ItemType): Promise<string[]> {
   const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${REGISTRY_PATH}/${type}`;
 
-  const response = await fetch(apiUrl, {
-    headers: {
-      "User-Agent": "akashic-devkit-cli",
-    },
-    agent: httpsAgent,
-  });
+  try {
+    const response = await fetch(apiUrl, {
+      headers: {
+        "User-Agent": "akashic-devkit-cli",
+      },
+      dispatcher,
+    });
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch ${type}: ${response.statusText}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${type}: ${response.statusText}`);
+    }
+
+    const items = (await response.json()) as RegistryItem[];
+    return items.filter((item) => item.type === "dir").map((item) => item.name);
+  } catch (error: any) {
+    // Check for SSL certificate errors (most SSL/TLS errors include 'CERT' in error code)
+    if (error.cause?.code?.includes('CERT')) {
+      throw new Error(`
+SSL certificate verification failed: ${error.cause.message}
+
+To skip SSL verification (not recommended), use:
+  AKASHIC_SKIP_SSL_VERIFY=1 akashic ${type === "components" ? "add" : "add"} <name>
+
+For more information, see: https://github.com/akashic-devkit/akashic-devkit#troubleshooting
+      `);
+    }
+    throw error;
   }
-
-  const items = (await response.json()) as RegistryItem[];
-  return items.filter((item) => item.type === "dir").map((item) => item.name);
 }
 
 /**
@@ -52,7 +77,7 @@ export async function checkItemExists(name: string, type: ItemType): Promise<boo
       headers: {
         "User-Agent": "akashic-devkit-cli",
       },
-      agent: httpsAgent,
+      dispatcher,
     });
 
     if (!response.ok) {
@@ -76,22 +101,37 @@ export async function fetchFileFromRegistry(
 ): Promise<string | unknown> {
   const rawUrl = `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${REGISTRY_PATH}/${type}/${name}/${name}.${extension}`;
 
-  const response = await fetch(rawUrl, {
-    headers: {
-      "User-Agent": "akashic-devkit-cli",
-    },
-    agent: httpsAgent,
-  });
+  try {
+    const response = await fetch(rawUrl, {
+      headers: {
+        "User-Agent": "akashic-devkit-cli",
+      },
+      dispatcher,
+    });
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch "${name}": ${response.statusText}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch "${name}": ${response.statusText}`);
+    }
+
+    if (extension === "json") {
+      return await response.json();
+    }
+
+    return await response.text();
+  } catch (error: any) {
+    // Check for SSL certificate errors (most SSL/TLS errors include 'CERT' in error code)
+    if (error.cause?.code?.includes('CERT')) {
+      throw new Error(`
+SSL certificate verification failed: ${error.cause.message}
+
+To skip SSL verification (not recommended), use:
+  AKASHIC_SKIP_SSL_VERIFY=1 akashic add ${name}
+
+For more information, see: https://github.com/akashic-devkit/akashic-devkit#troubleshooting
+      `);
+    }
+    throw error;
   }
-
-  if (extension === "json") {
-    return await response.json();
-  }
-
-  return await response.text();
 }
 
 /**

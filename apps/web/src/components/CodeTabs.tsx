@@ -1,40 +1,46 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import CodeViewer from "./CodeViewer";
 import { Card, CardContent } from "./ui/card";
 import { ReactNode } from "react";
-
-const CODE_TAB_TYPES = ["preview", "code"];
+import CopyButton from "./CopyButton";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import vs from "react-syntax-highlighter/dist/cjs/styles/prism/vs";
 
 interface Props {
-  type: "Component" | "Hook";
-  name: string;
+  rawCode: string;
   exampleComponent: ReactNode;
 }
 
-export default function CodeTabs({ type, name, exampleComponent }: Props) {
-  const fileExtension = type === "Component" ? ".tsx" : ".ts";
-  const fileName = name + fileExtension;
-
+export default function CodeTabs({ rawCode, exampleComponent }: Props) {
   return (
-    <Tabs defaultValue={CODE_TAB_TYPES[0]}>
+    <Tabs defaultValue="preview">
       <TabsList>
-        {CODE_TAB_TYPES.map((item) => (
-          <TabsTrigger key={`tab-${item}`} value={item}>
-            {item}
-          </TabsTrigger>
-        ))}
+        <TabsTrigger value="preview">preview</TabsTrigger>
+        <TabsTrigger value="code">code</TabsTrigger>
       </TabsList>
-      {CODE_TAB_TYPES.map((item) => (
-        <TabsContent key={`panel-${item}`} value={item}>
-          {item === "preview" ? (
-            <Card>
-              <CardContent>{exampleComponent}</CardContent>
-            </Card>
-          ) : (
-            <CodeViewer type="file" fileName={fileName} language="typescript" />
-          )}
-        </TabsContent>
-      ))}
+      <TabsContent value="preview">
+        <Card>
+          <CardContent>{exampleComponent}</CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="code">
+        <Card className="p-0 relative">
+          <CopyButton className="absolute right-1 top-1" text={rawCode} />
+          <CardContent className="p-2">
+            <SyntaxHighlighter
+              language="typescript"
+              style={vs}
+              showLineNumbers={true}
+              wrapLines={true}
+              customStyle={{
+                padding: 0,
+                border: "none",
+              }}
+            >
+              {rawCode}
+            </SyntaxHighlighter>
+          </CardContent>
+        </Card>
+      </TabsContent>
     </Tabs>
   );
 }
