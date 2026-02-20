@@ -40,16 +40,6 @@ jobs:
       - name: Build CLI
         run: pnpm build:cli
 
-      - name: Debug npm auth
-        run: |
-          echo "NPM_TOKEN set: ${{ secrets.NPM_TOKEN != '' }}"
-          echo "--- ~/.npmrc ---"
-          cat ~/.npmrc 2>/dev/null || echo "(not found)"
-          echo "--- ./.npmrc ---"
-          cat .npmrc 2>/dev/null || echo "(not found)"
-          echo "--- npm whoami ---"
-          npm whoami --registry https://registry.npmjs.org || echo "(auth failed)"
-
       - name: Create Release Pull Request or Publish
         uses: changesets/action@v1
         with:
